@@ -1,6 +1,15 @@
-from flask import Flask
-app = Flask("PaperTrail")
+from flask import Flask, render_template, request
 
-@app.route("/")
-def home():
-    return "Hello World, from Flask!"
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/customize', methods=['POST'])
+def customize():
+    text_size = request.form['text_size']
+    return render_template('index.html', text_size=text_size)
+
+if __name__ == '__main__':
+    app.run(debug=True)
