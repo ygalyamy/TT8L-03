@@ -4,15 +4,27 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
+    transform: rotate(90deg);
 }
 
 .bookcover {
-    width: 300px;
+    width: 500px;
+    transform: rotate(90deg);
 }
 
 .rectangle {
-    width: 100%;
-    height: 200px;
+    width: 500px;
+    height: 550px;
     background-color: white;
     border: 2px solid #000000;
+    transform: rotate(90deg);
+}
+
+.button {
+    position: absolute;
+    transform: rotate(90deg);
+    bottom: 270px;
+    right: 110%;
+    text-align: center;
+    cursor: pointer;
 }
