@@ -7,9 +7,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.5.0/fabric.min.js"></script>
 </head>
 <body>
-    <canvas id="drawingcanvas" width="500" height="550"></canvas>
-    <input type="text" id="quoteinput" placeholder="Enter your quote">
-    <button onclick="addQuote()">Add</button>
+    <div class="canvas-container">
+        <canvas id="drawingcanvas" width="500" height="550"></canvas>
+    </div>
+    <div class="quote-container">
+        <input type="text" id="quoteinput" placeholder="Enter your quote">
+        <button onclick="addQuote()">Add</button>
+    </div>
 
     <script>
         var canvas = new fabric.Canvas('drawingcanvas', {

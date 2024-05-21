@@ -28,3 +28,21 @@
     text-align: center;
     cursor: pointer;
 }
+
+.canvas-container {
+    border: 2px solid #000000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.quote-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+#quoteinput {
+    margin-right: 10px;
+}
