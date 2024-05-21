@@ -1,15 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="cover">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
         <title>in progress yall</title>
     </head>
-    <body>
+    <body class="cover">
         <div class="bookcover">
             <div class="rectangle"></div>
-            <button class="button">edit</button>
+            <form id="editform" action="{{ url_for( 'edit_book_cover') }}" method="post">
+                <input type="hidden" name="edit" value="true">
+                <button type="submit" class="button">edit</button>
+            </form>
         </div>
     </body>
 </html>

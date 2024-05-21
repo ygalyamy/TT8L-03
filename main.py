@@ -7,8 +7,10 @@ app = Flask(__name__)
 def bookcover():
     return render_template('cover.html')
 
-@app.route('/edit-book-cover')
+@app.route('/edit-book-cover', methods=['GET', 'POST'])
 def edit_book_cover():
+    if request.method == 'POST' and request.form.get('edit') == 'true':
+        return redirect(url_for('edit_book_cover'))
     return render_template('edit_book_cover.html')
 
 if __name__ == '__main__':
