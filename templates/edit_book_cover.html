@@ -12,6 +12,7 @@
     </div>
     <div class="quote-container">
         <input type="text" id="quoteinput" placeholder="Enter your quote">
+        <button id="drawbutton">enable drawing</button>
         <button onclick="addQuote()">Add</button>
     </div>
 
@@ -19,11 +20,32 @@
         var canvas = new fabric.Canvas('drawingcanvas', {
             backgroundColor: '#f1faee'
         });
-    </script>
-    <script>
+
+
         var line, isDrawing;
 
+        function enableDrawingMode() {
+            canvas.isDrawingMode = true;
+            canvas.freeDrawingBrush.color = 'black';
+            canvas.freeDrawingBrush.width = 5;
+        }
+
+        function disableDrawingMode () {
+            canvas.isDrawingMode = false;
+        }
+
+        document.getElementById('drawbutton').addEventListener('click', function() {
+            if (canvas.isDrawingMode) {
+                disableDrawingMode();
+                this.textContent = 'enable drawing';
+            } else {
+                enableDrawingMode();
+                this.textContent = 'disable drawing';
+            }
+        });
+
         canvas.on('mouse:down', function(o){
+            if (canvas.isDrawingMode) return;
             isDrawing = true;
             var pointer = canvas.getPointer(o.e);
             var points = [ pointer.x, pointer.y, pointer.x, pointer.y ];
@@ -45,6 +67,7 @@
         });
 
         canvas.on('mouse:up', function(o){
+            if (canvas.isDrawingMode) return;
             isDrawing = false;
         });
 
