@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}My Flask App{% endblock %}</title>
-    <link id="theme-style" rel="stylesheet" href="{{ url_for('static', filename='light.css') }}">
+    <link id="theme-style" rel="stylesheet" href="{{ url_for('static', filename='/Users/jasontanjiasheng/TT8L-03/Light & Dark Themes/light.css') }}">
 </head>
 <body>
     <div id="theme-toggle">
@@ -14,10 +14,10 @@
     <script>
         function toggleTheme() {
             var themeStyle = document.getElementById("theme-style");
-            if (themeStyle.getAttribute("href") === "{{ url_for('static', filename='light.css') }}") {
-                themeStyle.setAttribute("href", "{{ url_for('static', filename='dark.css') }}");
+            if (themeStyle.getAttribute("href") === "{{ url_for('static', filename='/Users/jasontanjiasheng/TT8L-03/Light & Dark Themes/light.css') }}") {
+                themeStyle.setAttribute("href", "{{ url_for('static', filename='/Users/jasontanjiasheng/TT8L-03/Light & Dark Themes/dark.css') }}");
             } else {
-                themeStyle.setAttribute("href", "{{ url_for('static', filename='light.css') }}");
+                themeStyle.setAttribute("href", "{{ url_for('static', filename='/Users/jasontanjiasheng/TT8L-03/Light & Dark Themes/light.css') }}");
             }
         }
     </script>
