@@ -3,23 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}My Flask App{% endblock %}</title>
-    <link id="theme-style" rel="stylesheet" href="{{ url_for('static', filename='/Users/jasontanjiasheng/TT8L-03/Light & Dark Themes/light.css') }}">
+    <title>PaperTrail</title>
+    <style>
+        /* Light theme styles */
+        :root {
+            --background-color: #ffffff;
+            --text-color: #000000;
+            --button-background-color: #ffffff;
+            --button-text-color: #000000;
+            --button-border-color: #000000;
+        }
+
+        /* Dark theme styles */
+        .dark-theme {
+            --background-color: #1f1f1f;
+            --text-color: #ffffff;
+            --button-background-color: #1f1f1f;
+            --button-text-color: #ffffff;
+            --button-border-color: #ffffff;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-family: Arial, sans-serif;
+        }
+
+        button {
+            background-color: var(--button-background-color);
+            color: var(--button-text-color);
+            border: 1px solid var(--button-border-color);
+            padding: 10px;
+            cursor: pointer;
+            margin: 5px;
+        }
+    </style>
 </head>
 <body>
     <div id="theme-toggle">
-        <button onclick="toggleTheme()">Toggle Theme</button>
+        <button onclick="setLightTheme()">Light Theme</button>
+        <button onclick="setDarkTheme()">Dark Theme</button>
     </div>
-    {% block content %}{% endblock %}
+    <h1>Welcome to PaperTrail</h1>
+    <p>This is a PaperTrail app with light and dark theme support.</p>
+
     <script>
-        function toggleTheme() {
-            var themeStyle = document.getElementById("theme-style");
-            if (themeStyle.getAttribute("href") === "{{ url_for('static', filename='/Users/jasontanjiasheng/TT8L-03/Light & Dark Themes/light.css') }}") {
-                themeStyle.setAttribute("href", "{{ url_for('static', filename='/Users/jasontanjiasheng/TT8L-03/Light & Dark Themes/dark.css') }}");
-            } else {
-                themeStyle.setAttribute("href", "{{ url_for('static', filename='/Users/jasontanjiasheng/TT8L-03/Light & Dark Themes/light.css') }}");
-            }
+        function setLightTheme() {
+            document.body.classList.remove("dark-theme");
+        }
+
+        function setDarkTheme() {
+            document.body.classList.add("dark-theme");
         }
     </script>
 </body>
 </html>
+
+
