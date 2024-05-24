@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}PaperTrail{% endblock%}</title>
-    <link id="theme-style" rel="styesheet" href="/Users/jasontanjiasheng/TT8L-03/Light & Dark Themes/light.html">
+    <title>{% block title %}My Flask App{% endblock %}</title>
+    <link id="theme-style" rel="stylesheet" href="{{ url_for('static', filename='light.css') }}">
 </head>
 <body>
     <div id="theme-toggle">
@@ -13,11 +13,13 @@
     {% block content %}{% endblock %}
     <script>
         function toggleTheme() {
-            var body = document.body;
-            body.classList.toggle("dark-theme");
             var themeStyle = document.getElementById("theme-style");
-            themeStyle.href = body.classList.contains("dark-theme") ? "{{ url_for('static', filename='dark.css') }}" : "{{ url_for('static', filename='light.css') }}";
+            if (themeStyle.getAttribute("href") === "{{ url_for('static', filename='light.css') }}") {
+                themeStyle.setAttribute("href", "{{ url_for('static', filename='dark.css') }}");
+            } else {
+                themeStyle.setAttribute("href", "{{ url_for('static', filename='light.css') }}");
+            }
         }
     </script>
-</body>   
+</body>
 </html>
