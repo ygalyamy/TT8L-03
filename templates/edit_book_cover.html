@@ -5,25 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.5.0/fabric.min.js"></script>
+    <title>Edit</title>
 </head>
 <body>
-    <div class="canvas-container">
-        <canvas id="drawingcanvas" width="500" height="550"></canvas>
+    <div class="container">
+        <div class="canvas-container">
+            <canvas id="drawingcanvas" width="500" height="550"></canvas>
+        </div>
+        <div class="toolbar">
+            <div class="color-picker-container">
+                <label for="colorPicker">Select Color:</label>
+                <input type="color" id="colorPicker" value="#000000">
+            </div>
+            <div class="quote-container">
+                <input type="text" id="quoteinput" placeholder="Enter your quote">
+                <button onclick="addQuote()" class="btn">Add</button>
+                <button id="drawbutton" class="btn">Enable Drawing</button>
+                <button onclick="saveCanvas()" class="btn">Save</button>
+            </div>
+            <div class="shape-container">
+                <button onclick="addRectangle()" class="btn">Add Rectangle</button>
+                <button onclick="addCircle()" class="btn">Add Circle</button>
+            </div>
+            <div class="image-container">
+                <label for="imageLoader" class="btn">Upload Image</label>
+                <input type="file" id="imageLoader" name="imageLoader"/>
+            </div>
+        </div>
     </div>
-    <div class="quote-container">
-        <input type="color" id="colorPicker" value="#000000">
-        <input type="text" id="quoteinput" placeholder="Enter your quote">
-        <button id="drawbutton">Enable Drawing</button>
-        <button onclick="addQuote()">Add</button>
-        <button onclick="saveCanvas()">Save</button>
-    </div>
-    <div class="shape-container">
-        <button onclick="addRectangle()">Add Rectangle</button>
-        <button onclick="addCircle()">Add Circle</button>
-    </div>
-    <div class="image-container">
-        <input type="file" id="imageLoader" name="imageLoader"/>
-    </div>
+
 
     <script>
         var canvas = new fabric.Canvas('drawingcanvas', {
