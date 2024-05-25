@@ -11,10 +11,18 @@
         <canvas id="drawingcanvas" width="500" height="550"></canvas>
     </div>
     <div class="quote-container">
+        <input type="color" id="colorPicker" value="#000000">
         <input type="text" id="quoteinput" placeholder="Enter your quote">
         <button id="drawbutton">Enable Drawing</button>
         <button onclick="addQuote()">Add</button>
         <button onclick="saveCanvas()">Save</button>
+    </div>
+    <div class="shape-container">
+        <button onclick="addRectangle()">Add Rectangle</button>
+        <button onclick="addCircle()">Add Circle</button>
+    </div>
+    <div class="image-container">
+        <input type="file" id="imageLoader" name="imageLoader"/>
     </div>
 
     <script>
@@ -29,7 +37,7 @@
         function enableDrawingMode() {
             if (!isMovingQuote) {
                 canvas.isDrawingMode = true;
-                canvas.freeDrawingBrush.color = 'black';
+                canvas.freeDrawingBrush.color = colorPicker.value;
                 canvas.freeDrawingBrush.width = 5;
             }
         }
@@ -39,7 +47,7 @@
         }
 
         canvas.on('mouse:down', function(o){
-            if (!isMovingQuote && canvas.isDrawingMode) return;
+            if (!isMovingQuote && !canvas.isDrawingMode) return;
             var pointer = canvas.getPointer(o.e);
             var objects = canvas.getObjects();
             objects.forEach(function(object) {
@@ -62,7 +70,7 @@
                 left: 100,
                 top: 100,
                 fontSize: 20,
-                fill: 'black'
+                fill: colorPicker.value
             });
             canvas.add(text);
             disableDrawingMode();
@@ -97,6 +105,55 @@
                 this.textContent = 'Disable Drawing';
             }
         });
+
+        var colorPicker = document.getElementById('colorPicker');
+        colorPicker.addEventListener('change', function() {
+            canvas.freeDrawingBrush.color = this.value;
+        });
+
+        function addRectangle() {
+            var rect = new fabric.Rect({
+                left: 100,
+                top: 100,
+                fill: colorPicker.value,
+                width: 60,
+                height: 70,
+                selectable: true
+            });
+            canvas.add(rect);
+        }
+
+        function addCircle() {
+            var circle = new fabric.Circle({
+                left: 150,
+                top: 150,
+                fill: colorPicker.value,
+                radius: 30,
+                selectable: true
+            });
+            canvas.add(circle);
+        }
+
+        var imageLoader = document.getElementById('imageLoader');
+        imageLoader.addEventListener('change', handleImage, false);
+
+        function handleImage(e) {
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                var imgObj = new Image();
+                imgObj.src = event.target.result;
+                imgObj.onload = function() {
+                    var img = new fabric.Image(imgObj);
+                    img.scale(0.5).set({
+                        left: 100,
+                        top: 100,
+                        selectable: true
+                    });
+                    canvas.add(img);
+                }
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        }
     </script>
 </body>
 </html>
