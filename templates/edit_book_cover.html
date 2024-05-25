@@ -12,8 +12,9 @@
     </div>
     <div class="quote-container">
         <input type="text" id="quoteinput" placeholder="Enter your quote">
-        <button id="drawbutton">enable drawing</button>
+        <button id="drawbutton">Enable Drawing</button>
         <button onclick="addQuote()">Add</button>
+        <button onclick="saveCanvas()">Save</button>
     </div>
 
     <script>
@@ -37,10 +38,10 @@
         document.getElementById('drawbutton').addEventListener('click', function() {
             if (canvas.isDrawingMode) {
                 disableDrawingMode();
-                this.textContent = 'enable drawing';
+                this.textContent = 'Enable Drawing';
             } else {
                 enableDrawingMode();
-                this.textContent = 'disable drawing';
+                this.textContent = 'Disable Drawing';
             }
         });
 
@@ -80,6 +81,25 @@
                 fill: 'black'
             });
             canvas.add(text);
+        }
+
+        function saveCanvas() {
+            var dataURL = canvas.toDataURL({
+                format: 'png',
+                quality: 0.8
+            });
+            fetch("{{ url_for('save_image') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ image: dataURL })
+            }).then(Response => Response.json())
+            .then (data => {
+                if (data.success) {
+                    window.location.href = "{{ url_for('bookcover') }}";
+                } 
+            });
         }
     </script>
 </body>

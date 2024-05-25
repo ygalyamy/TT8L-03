@@ -4,14 +4,17 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
-        <title>in progress yall</title>
+        <title>Book Cover</title>
     </head>
     <body class="cover">
         <div class="bookcover">
-            <div class="rectangle"></div>
-            <form id="editform" action="{{ url_for( 'edit_book_cover') }}" method="post">
-                <input type="hidden" name="edit" value="true">
-                <button type="submit" class="button">edit</button>
+            {% if image_exists %}
+                <img src="{{ url_for('static', filename=image_path) }}" alt="Book Cover" class="cover-image">
+            {% else %}
+                <div class="rectangle">No cover image available</div>
+            {% endif %}
+            <form action="{{ url_for('edit_book_cover') }}" method="get">
+                <button type="submit" class="button">Edit</button>
             </form>
         </div>
     </body>

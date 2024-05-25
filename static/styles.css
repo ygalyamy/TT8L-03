@@ -4,12 +4,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    transform: rotate(90deg);
+    flex-direction: column;
 }
 
 .bookcover {
-    width: 500px;
-    transform: rotate(90deg);
+    position: relative;
+    width: 550px;
 }
 
 .rectangle {
@@ -17,14 +17,22 @@
     height: 550px;
     background-color: #f1faee;
     border: 2px solid #000000;
-    transform: rotate(90deg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cover-image {
+    width: 500px;
+    height: 550px;
+    border: 2px solid black;
+    object-fit: cover;
 }
 
 .button {
     position: absolute;
-    transform: rotate(90deg);
-    bottom: 270px;
-    right: 110%;
+    bottom: -10%;
+    right: 50%;
     text-align: center;
     cursor: pointer;
 }
@@ -43,6 +51,14 @@
     margin-top: 20px;
 }
 
+.quote-container input, .quote-container button {
+    margin: 5px;
+}
+
 #quoteinput {
     margin-right: 10px;
+}
+
+#drawingcanvas {
+    border: 1px solid black;
 }
