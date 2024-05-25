@@ -19,57 +19,41 @@
 
     <script>
         var canvas = new fabric.Canvas('drawingcanvas', {
-            backgroundColor: '#f1faee'
+            backgroundColor: '#f1faee',
+            isDrawingMode: false
         });
 
 
-        var line, isDrawing;
+        var isMovingQuote = false;
 
         function enableDrawingMode() {
-            canvas.isDrawingMode = true;
-            canvas.freeDrawingBrush.color = 'black';
-            canvas.freeDrawingBrush.width = 5;
+            if (!isMovingQuote) {
+                canvas.isDrawingMode = true;
+                canvas.freeDrawingBrush.color = 'black';
+                canvas.freeDrawingBrush.width = 5;
+            }
         }
 
         function disableDrawingMode () {
             canvas.isDrawingMode = false;
         }
 
-        document.getElementById('drawbutton').addEventListener('click', function() {
-            if (canvas.isDrawingMode) {
-                disableDrawingMode();
-                this.textContent = 'Enable Drawing';
-            } else {
-                enableDrawingMode();
-                this.textContent = 'Disable Drawing';
-            }
-        });
-
         canvas.on('mouse:down', function(o){
-            if (canvas.isDrawingMode) return;
-            isDrawing = true;
+            if (!isMovingQuote && canvas.isDrawingMode) return;
             var pointer = canvas.getPointer(o.e);
-            var points = [ pointer.x, pointer.y, pointer.x, pointer.y ];
-            line = new fabric.Line(points, {
-                strokeWidth: 5,
-                fill: 'black',
-                stroke: 'black',
-                originX: 'center',
-                originY: 'center',
+            var objects = canvas.getObjects();
+            objects.forEach(function(object) {
+                if (object.type === 'text' && object === o.target) {
+                    isMovingQuote = true;
+                    disableDrawingMode();
+                }
             });
-            canvas.add(line);
-        });
-
-        canvas.on('mouse:move', function(o){
-            if (!isDrawing) return;
-            var pointer = canvas.getPointer(o.e);
-            line.set({ x2: pointer.x, y2: pointer.y });
-            canvas.renderAll();
         });
 
         canvas.on('mouse:up', function(o){
-            if (canvas.isDrawingMode) return;
-            isDrawing = false;
+            if (isMovingQuote) {
+                isMovingQuote = false;
+            }
         });
 
         function addQuote() {
@@ -81,6 +65,7 @@
                 fill: 'black'
             });
             canvas.add(text);
+            disableDrawingMode();
         }
 
         function saveCanvas() {
@@ -101,6 +86,17 @@
                 } 
             });
         }
+
+        var drawButton = document.getElementById('drawbutton');
+        drawButton.addEventListener('click', function() {
+            if (canvas.isDrawingMode) {
+                disableDrawingMode();
+                this.textContent = 'Enable Drawing';
+            } else {
+                enableDrawingMode();
+                this.textContent = 'Disable Drawing';
+            }
+        });
     </script>
 </body>
 </html>
