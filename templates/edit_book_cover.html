@@ -31,6 +31,9 @@
                 <label for="imageLoader" class="btn">Upload Image</label>
                 <input type="file" id="imageLoader" name="imageLoader"/>
             </div>
+            <div class="eraser-container">
+                <button id="eraserbutton" class="btn">Enable Eraser</button>
+            </div>
         </div>
     </div>
 
@@ -54,6 +57,12 @@
 
         function disableDrawingMode () {
             canvas.isDrawingMode = false;
+        }
+
+        function enableEraserMode() {
+            canvas.isDrawingMode = true;
+            canvas.freeDrawingBrush.color = '#f1faee';
+            canvas.freeDrawingBrush.width = 10;
         }
 
         canvas.on('mouse:down', function(o){
@@ -113,6 +122,17 @@
             } else {
                 enableDrawingMode();
                 this.textContent = 'Disable Drawing';
+            }
+        });
+
+        var eraserButton = document.getElementById('drawbutton');
+        drawButton.addEventListener('click', function() {
+            if (canvas.isDrawingMode && canvas.freeDrawingBrush.color == '#f1faee') {
+                disableDrawingMode();
+                this.textContent ='Enable Eraser';
+            } else {
+                enableEraserMode();
+                this.textContent = 'Disable Eraser';
             }
         });
 

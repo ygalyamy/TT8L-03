@@ -1,5 +1,6 @@
 .cover {
     height: 100%;
+    font-family: sans-serif;
     margin: 0;
     display: flex;
     justify-content: center;
@@ -46,7 +47,7 @@
     background-color: #fff;
 }
 
-.color-picker-container, .quote-container, .shape-container, .image-container {
+.color-picker-container, .quote-container, .shape-container, .image-container, .eraser-container {
     display: flex;
     justify-content: center;
     align-items: center;
