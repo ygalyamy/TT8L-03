@@ -9,30 +9,35 @@
 </head>
 <body>
     <div class="container">
-        <div class="canvas-container">
-            <canvas id="drawingcanvas" width="500" height="550"></canvas>
-        </div>
-        <div class="toolbar">
+        <div class="toolbar-right">
             <div class="color-picker-container">
-                <label for="colorPicker">Select Color:</label>
+                <label for="colorPicker" class="btn">Select Color</label>
                 <input type="color" id="colorPicker" value="#000000">
-            </div>
-            <div class="quote-container">
-                <input type="text" id="quoteinput" placeholder="Enter your quote">
-                <button onclick="addQuote()" class="btn">Add</button>
-                <button id="drawbutton" class="btn">Enable Drawing</button>
-                <button onclick="saveCanvas()" class="btn">Save</button>
             </div>
             <div class="shape-container">
                 <button onclick="addRectangle()" class="btn">Add Rectangle</button>
+            </div>
+            <div class="shape-container">
                 <button onclick="addCircle()" class="btn">Add Circle</button>
+            </div>
+            <div class="drawing-container">
+                <button id="drawbutton" class="btn">Enable Drawing</button>
             </div>
             <div class="image-container">
                 <label for="imageLoader" class="btn">Upload Image</label>
                 <input type="file" id="imageLoader" name="imageLoader"/>
             </div>
-            <div class="eraser-container">
-                <button id="eraserbutton" class="btn">Enable Eraser</button>
+        </div>
+        
+        <div class="canvas-container">
+            <canvas id="drawingcanvas" width="500" height="550"></canvas>
+        </div>
+
+        <div class="quote-save-container">
+            <div class="quote-container">
+                    <input type="text" id="quoteinput" placeholder="Enter your quote">
+                    <button onclick="addQuote()" class="btn">Add</button>
+                    <button onclick="saveCanvas()" class="btn">Save</button>
             </div>
         </div>
     </div>
@@ -57,12 +62,6 @@
 
         function disableDrawingMode () {
             canvas.isDrawingMode = false;
-        }
-
-        function enableEraserMode() {
-            canvas.isDrawingMode = true;
-            canvas.freeDrawingBrush.color = '#f1faee';
-            canvas.freeDrawingBrush.width = 10;
         }
 
         canvas.on('mouse:down', function(o){
@@ -122,17 +121,6 @@
             } else {
                 enableDrawingMode();
                 this.textContent = 'Disable Drawing';
-            }
-        });
-
-        var eraserButton = document.getElementById('drawbutton');
-        drawButton.addEventListener('click', function() {
-            if (canvas.isDrawingMode && canvas.freeDrawingBrush.color == '#f1faee') {
-                disableDrawingMode();
-                this.textContent ='Enable Eraser';
-            } else {
-                enableEraserMode();
-                this.textContent = 'Disable Eraser';
             }
         });
 

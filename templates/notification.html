@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <title>Notification Toggle</title>
+</head>
+<body>
+    <div class="toggle">
+        <label for="check" class="toggle-label">Show Notification</label>
+        <input type="checkbox" class="throw" id="check">
+        <label for="check" class="button"></label>
+    </div>
+
+    <div class="notification-container" id="notificationContainer">
+        <div class="notification" id="notification">
+            This is a notification.
+            <button onclick="closeNotification()">Close</button>
+        </div>
+    </div>
+
+    <script>
+
+        var notificationsEnabled = false;
+        var notificationInterval;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var toggleButton = document.getElementById("check");
+
+            if (localStorage.getItem("notificationsEnabled") === "true") {
+                toggleButton.checked = true;
+                notificationsEnabled = true;
+                startNotificationInterval();
+            }
+
+            toggleButton.addEventListener('change', function() {
+                if (this.checked) {
+                    notificationsEnabled = true;
+                    localStorage.setItem("notificationsEnabled", "true");
+                    startNotificationInterval();
+                } else {
+                    notificationsEnabled = false;
+                    localStorage.setItem("notificationsEnabled", "false");
+                    clearInterval(notificationInterval);
+                }
+            });
+        });
+
+        function startNotificationInterval() {
+            showNotification();
+            notificationInterval = setInterval(function() {
+                showNotification();
+            }, 30 * 1000);
+        }
+
+        function showNotification() {
+            if (!notificationsEnabled) return;
+
+            var notificationContainer = document.getElementById("notificationContainer");
+            var notification = document.getElementById("notification");
+
+            notificationContainer.style.display = "block";
+
+            setTimeout(function () {
+                notificationContainer.style.display = "none";
+            }, 3000);
+        }
+
+        function closeNotification() {
+            var notificationContainer = document.getElementById("notificationContainer");
+            notificationContainer.style.display = "none";
+        }
+
+    </script>
+</body>
+</html>

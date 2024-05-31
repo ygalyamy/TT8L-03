@@ -26,5 +26,9 @@ def save_image():
         f.write(image_data)
     return jsonify(success=True)
 
+@app.route('/notification')
+def noti():
+    return render_template("notification.html")
+
 if __name__ == '__main__':
     app.run(debug=True)
