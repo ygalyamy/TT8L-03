@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.5.0/fabric.min.js"></script>
     <title>Edit</title>
@@ -11,21 +12,23 @@
     <div class="container">
         <div class="toolbar-right">
             <div class="color-picker-container">
-                <label for="colorPicker" class="btn">Select Color</label>
-                <input type="color" id="colorPicker" value="#000000">
+                <label for="colorPicker" class="btn" title="Choose Color"><i class="fas fa-palette"></i><input type="color" id="colorPicker" value="#000000"></label>
             </div>
             <div class="shape-container">
-                <button onclick="addRectangle()" class="btn">Add Rectangle</button>
+                <button onclick="addRectangle()" class="btn" title="Add Rectangle"><i class="fas fa-square"></i></button>
             </div>
             <div class="shape-container">
-                <button onclick="addCircle()" class="btn">Add Circle</button>
+                <button onclick="addCircle()" class="btn" title="Add Circle"><i class="fas fa-circle"></i></button>
             </div>
             <div class="drawing-container">
-                <button id="drawbutton" class="btn">Enable Drawing</button>
+                <button id="drawbutton" class="btn" title="Draw"><i class="fas fa-pencil-alt"></i></button>
             </div>
             <div class="image-container">
-                <label for="imageLoader" class="btn">Upload Image</label>
+                <label for="imageLoader" class="btn" title="Upload Image"><i class="fas fa-image"></i></label>
                 <input type="file" id="imageLoader" name="imageLoader"/>
+            </div>
+            <div class="eraser-container">
+                <button id="eraserButton" class="btn" title="Eraser"><i class="fas fa-eraser"></i></button>
             </div>
         </div>
         
@@ -36,8 +39,8 @@
         <div class="quote-save-container">
             <div class="quote-container">
                     <input type="text" id="quoteinput" placeholder="Enter your quote">
-                    <button onclick="addQuote()" class="btn">Add</button>
-                    <button onclick="saveCanvas()" class="btn">Save</button>
+                    <button onclick="addQuote()" class="btn" title="Add Quote"><i class="fas fa-plus"></i></button>
+                    <button onclick="saveCanvas()" class="btn" title="Save"><i class="fas fa-save"></i></button>
             </div>
         </div>
     </div>
@@ -45,7 +48,7 @@
 
     <script>
         var canvas = new fabric.Canvas('drawingcanvas', {
-            backgroundColor: '#f1faee',
+            backgroundColor: '#edf6f9',
             isDrawingMode: false
         });
 
@@ -117,11 +120,10 @@
         drawButton.addEventListener('click', function() {
             if (canvas.isDrawingMode) {
                 disableDrawingMode();
-                this.textContent = 'Enable Drawing';
             } else {
                 enableDrawingMode();
-                this.textContent = 'Disable Drawing';
             }
+            this.innerHTML = '<i class="fas fa-pencil-alt"></i>';
         });
 
         var colorPicker = document.getElementById('colorPicker');
@@ -172,6 +174,46 @@
             }
             reader.readAsDataURL(e.target.files[0]);
         }
+
+        var isErasing = false;
+
+        function enableEraserMode() {
+            canvas.isDrawingMode = false;
+            isErasing = true;
+        }
+
+        function disableEraserMode() {
+            isErasing = false;
+        }
+
+        document.getElementById('eraserButton').addEventListener('click', function() {
+            if (isErasing) {
+                disableEraserMode();
+            } else {
+                enableEraserMode();
+            }
+            this.innerHTML = '<i class="fas fa-eraser"></i>';
+        });
+
+        canvas.on('mouse:down', function(o) {
+            if (isErasing) {
+                var pointer = canvas.getPointer(o.e);
+                var objects = canvas.getObjects();
+                var toRemove = [];
+
+                objects.forEach(function(object) {
+                    if (object.containsPoint(pointer)) {
+                        toRemove.push(object);
+                    }
+                });
+
+                toRemove.forEach(function(object) {
+                    canvas.remove(object);
+                });
+
+                canvas.renderAll();
+            }
+        });
     </script>
 </body>
 </html>

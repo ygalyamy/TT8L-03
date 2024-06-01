@@ -15,7 +15,7 @@
 .rectangle {
     width: 500px;
     height: 550px;
-    background-color: #f1faee;
+    background-color: #edf6f9;
     border: 2px solid #000000;
     display: flex;
     justify-content: center;
@@ -41,15 +41,6 @@
 
 .toolbar-right {
     right: 300px;
-}
-
-.canvas-container {
-    border: 2px solid #000000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 50px;
-    background-color: #fff;
 }
 
 .color-picker-container, .drawing-container, .shape-container, .image-container {
@@ -105,7 +96,7 @@ input[type="text"] {
     background-color: #000000;
 }
 
-#imageLoader {
+#imageLoader, #colorPicker {
     display: none;
 }
 
@@ -114,14 +105,14 @@ input[type="text"] {
 }
 
 #drawingcanvas {
-    border: 1px solid black;
+    border: 2px solid black;
 }
 
-.container {
+.canvas-container {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    position: relative;
+    margin: 20px 0;
 }
 
 .toolbar {
