@@ -12,7 +12,7 @@ if not os.path.exists('static/images'):
 def bookcover(): 
     image_path = 'images/bookcover.png'
     image_exists = os.path.exists(os.path.join('static', image_path))
-    return render_template('cover.html', image_exists=image_exists, image_path=image_path)
+    return render_template('index.html', image_exists=image_exists, image_path=image_path)
 
 @app.route('/edit-book-cover', methods=['GET'])
 def edit_book_cover():
