@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 import os
 import base64
+from datetime import datetime
 import json
 
 app = Flask(__name__)
@@ -12,7 +13,7 @@ if not os.path.exists('static/images'):
 def bookcover(): 
     image_path = 'images/bookcover.png'
     image_exists = os.path.exists(os.path.join('static', image_path))
-    return render_template('index.html', image_exists=image_exists, image_path=image_path)
+    return render_template('cover.html', image_exists=image_exists, image_path=image_path)
 
 @app.route('/edit-book-cover', methods=['GET'])
 def edit_book_cover():
@@ -44,5 +45,10 @@ def load_canvas_state():
 def noti():
     return render_template("notification.html")
 
+@app.route('/book-of-the-month')
+def bookofthemonth():
+    return render_template("book_of_the_month.html")
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5000)

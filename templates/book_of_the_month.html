@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Books of the Month</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #15b794;
+        }
+        .book-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .book-item:last-child {
+            border-bottom: none;
+        }
+        .book-title {
+            font-size: 1.2em;
+            color: #333;
+        }
+        .book-rating {
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Top Books of the Month</h1>
+        <div id="booksContainer"></div>
+    </div>
+
+    <script>
+        // Retrieve data from local storage
+        var bookReviews = JSON.parse(localStorage.getItem('bookReviews'));
+
+        console.log('Retrieved book reviews:', bookReviews); // Check if book reviews are retrieved correctly
+
+        // Check if bookReviews is not null before sorting and displaying
+        if (bookReviews) {
+            console.log('Sorting book reviews...');
+            bookReviews.sort(function(a, b) {
+                return parseInt(b.book_rating) - parseInt(a.book_rating);
+            });
+
+            console.log('Sorted book reviews:', bookReviews); // Check if book reviews are sorted correctly
+
+            // Display the sorted book reviews on the page
+            var booksContainer = document.getElementById('booksContainer');
+            bookReviews.forEach(function(book) {
+                var bookItem = document.createElement('div');
+                bookItem.classList.add('book-item');
+                bookItem.innerHTML = `
+                    <div class="book-title">Genre: ${book.genre}</div>
+                    <div class="book-rating">Rating: ${book.book_rating}</div>
+                    <div class="book-thoughts">Thoughts: ${book.overall_thoughts}</div>
+                `;
+                booksContainer.appendChild(bookItem);
+            });
+        } else {
+            console.log('No book reviews found in local storage.');
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
