@@ -4,9 +4,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.5.0/fabric.min.js"></script>
     <title>Edit</title>
+    <style>
+       .toolbar-right {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: absolute;
+            gap: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 300px;
+        }
+        .color-picker-container, .drawing-container, .shape-container, .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        .quote-container {
+            display: flex;
+            gap: 10px;
+        }
+        .quote-save-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        input[type="color"] {
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            width: 200px;
+        }
+        .btn {
+            background-color: #000000A0;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            width: 100px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            font-family: sans-serif;
+        }
+        .btn:hover {
+            background-color: #000000;
+        }
+        #imageLoader, #colorPicker {
+            display: none;
+        }
+        #quoteinput {
+            margin-right: 10px;
+        }
+        #drawingcanvas {
+            border: 2px solid black;
+        }
+        .canvas-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+    </style>
 </head>
 <body>
     <div class="container">

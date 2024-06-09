@@ -3,9 +3,59 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
         <title>Book Cover</title>
     </head>
+    <style>
+        .cover {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .bookcover {
+            position: relative;
+            width: 550px;
+        }
+        .rectangle {
+            width: 500px;
+            height: 550px;
+            background-color: #edf6f9;
+            border: 2px solid #000000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .cover-image {
+            width: 500px;
+            height: 550px;
+            border: 2px solid black;
+            object-fit: cover;
+        }
+        .coverbtn {
+            position: absolute;
+            bottom: -10%;
+            right: 50%;
+            text-align: center;
+            cursor: pointer;
+            background-color: #000000A0;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            font-family: sans-serif;
+        }
+        .coverbtn:hover {
+            background-color: #000000;
+        }
+    </style>
     <body class="cover">
         <div class="bookcover">
             {% if image_exists %}
