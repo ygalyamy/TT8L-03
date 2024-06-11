@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="/Users/jasontanjiasheng/TT8L-03/images/papertrail.png">
     <title>Book Review Form</title>
     <style>
         body {
@@ -144,6 +143,19 @@
 
             // Store updated reviews in local storage
             localStorage.setItem('bookReviews', JSON.stringify(existingReviews));
+
+            // Create a text file for the genre
+            var genre = formData.genre;
+            var textFileContent = "Genre: " + genre + "\n";
+
+            var blob = new Blob([textFileContent], { type: 'text/plain' });
+            var url = URL.createObjectURL(blob);
+
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = genre + '.txt';
+            a.click();
+            URL.revokeObjectURL(url);
 
             // Reset the form
             document.getElementById('bookReviewForm').reset();
