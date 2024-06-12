@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/Users/jasontanjiasheng/TT8L-03/images/papertrail.png">
+    <title>PaperTrail</title>
+    <style>
+        /* Light theme styles */
+        :root {
+            --background-color: #ffffff;
+            --text-color: #000000;
+            --button-background-color: #ffffff;
+            --button-text-color: #000000;
+            --button-border-color: #000000;
+            --toggle-background: #cccccc;
+            --toggle-color: hsl(120, 91%, 48%);
+            --toggle-knob: #ffffff;
+            --text-size: 16px;
+        }
+
+        /* Dark theme styles */
+        .dark-theme {
+            --background-color: #1f1f1f;
+            --text-color: #ffffff;
+            --button-background-color: #1f1f1f;
+            --button-text-color: #ffffff;
+            --button-border-color: #ffffff;
+            --toggle-background: #333;
+            --toggle-color: hsl(120, 91%, 48%);
+            --toggle-knob: #ffffff;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-family: Arial, sans-serif;
+            font-size: var(--text-size);
+        }
+
+        .button-container {
+            display: flex;
+            align-items: center;
+        }
+
+        button {
+            background-color: var(--button-background-color);
+            color: var(--button-text-color);
+            border: 1px solid var(--button-border-color);
+            padding: 10px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .switch {
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+            background-color: var(--toggle-background);
+            border-radius: 34px;
+            cursor: pointer;
+            transition: background-color 0.4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: var(--toggle-knob);
+            border-radius: 50%;
+            transition: transform 0.4s;
+        }
+
+        input:checked + .slider {
+            background-color: var(--toggle-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="number"] {
+            width: 100px;
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        p {
+            font-size: var(--text-size);
+            text-align: center;
+        }
+
+        nav a {
+            margin-right: 20px;
+            text-decoration: none;
+            color: var(--text-color);
+        }
+
+        #content {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="#" onclick="loadContent('home')">HOME</a>
+        <a href="#" onclick="loadContent('library')">LIBRARY</a>
+        <a href="#" onclick="loadContent('toppicks')">BOOK OF THE MONTH</a>
+        <a href="#" onclick="loadContent('settings')">SETTINGS</a>
+    </nav>
+
+    <div id="content">
+        <h1>Welcome to PaperTrail</h1>
+        <p>This is the home page content.</p>
+    </div>
+
+    <script>
+        function loadContent(page) {
+            const content = document.getElementById('content');
+            if (page === 'settings') {
+                content.innerHTML = `
+                    <div class="button-container">
+                        <button onclick="setLightTheme()">Light Theme</button>
+                        <label class="switch">
+                            <input type="checkbox" id="light-switch" onchange="toggleLightTheme()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="button-container">
+                        <button onclick="setDarkTheme()">Dark Theme</button>
+                        <label class="switch">
+                            <input type="checkbox" id="dark-switch" onchange="toggleDarkTheme()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <h1>Welcome to PaperTrail</h1>
+                    <p>This is a PaperTrail app with light and dark theme support.</p>
+                    <h1>Text Size Customization</h1>
+                    <form>
+                        <label for="text_size">Enter text size (in pixels):</label>
+                        <input type="number" id="text_size" name="text_size" required>
+                        <button type="button" onclick="applyTextSize()">Apply</button>
+                    </form>
+                    <p id="sample-text">This is a sample text with customizable size.</p>
+                `;
+                setLightTheme();
+            } else {
+                content.innerHTML = `
+                    <h1>${page.charAt(0).toUpperCase() + page.slice(1)} Page</h1>
+                    <p>This is the ${page} page content.</p>
+                `;
+            }
+        }
+
+        function setLightTheme() {
+            document.body.classList.remove("dark-theme");
+            document.getElementById("light-switch").checked = true;
+            document.getElementById("dark-switch").checked = false;
+        }
+
+        function setDarkTheme() {
+            document.body.classList.add("dark-theme");
+            document.getElementById("light-switch").checked = false;
+            document.getElementById("dark-switch").checked = true;
+        }
+
+        function toggleLightTheme() {
+            if (document.getElementById("light-switch").checked) {
+                setLightTheme();
+            } else {
+                setDarkTheme();
+            }
+        }
+
+        function toggleDarkTheme() {
+            if (document.getElementById("dark-switch").checked) {
+                setDarkTheme();
+            } else {
+                setLightTheme();
+            }
+        }
+
+        function applyTextSize() {
+            const textSize = document.getElementById('text_size').value + 'px';
+            document.documentElement.style.setProperty('--text-size', textSize);
+        }
+
+        window.onload = function() {
+            setLightTheme();
+        };
+    </script>
+</body>
+</html>
