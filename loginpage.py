@@ -1,104 +1,60 @@
-from flask import Flask, render_template, url_for, redirect
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
+from flask import Flask, render_template, request, redirect, url_for, session, flash
+from forms import LoginForm as WTLoginForm  # Renamed the imported LoginForm
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import InputRequired, Length, ValidationError
-from flask_bcrypt import Bcrypt
+from wtforms.validators import InputRequired, Length
+import dataset
+import hashlib
 
 app = Flask(__name__)
-db = SQLAlchemy(app)
-bcrypt = Bcrypt(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SECRET_KEY'] = 'thisisasecretkey'
 
+# Connect to the SQLite database
+db = dataset.connect('sqlite:///database.db')
 
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = 'login'
+# Define the 'users' table
+table = db['users']
 
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
-
-
-class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20), nullable=False, unique=True)
-    password = db.Column(db.String(80), nullable=False)
-
-
-class RegisterForm(FlaskForm):
-    username = StringField(validators=[
-                           InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
-
-    password = PasswordField(validators=[
-                             InputRequired(), Length(min=8, max=20)], render_kw={"placeholder": "Password"})
-
-    submit = SubmitField('Register')
-
-    def validate_username(self, username):
-        existing_user_username = User.query.filter_by(
-            username=username.data).first()
-        if existing_user_username:
-            raise ValidationError(
-                'That username already exists. Please choose a different one.')
-
-
-class LoginForm(FlaskForm):
-    username = StringField(validators=[
-                           InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
-
-    password = PasswordField(validators=[
-                             InputRequired(), Length(min=8, max=20)], render_kw={"placeholder": "Password"})
-
-    submit = SubmitField('Login')
-
-
+# Routes
 @app.route('/')
 def home():
-    return render_template('home.html')
+    return render_template('webpage.html')
 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = WTLoginForm()  # Create an instance of the LoginForm class
+    if request.method == 'POST' and form.validate_on_submit():
+        # Registration logic here
+        username = form.username.data
+        password = hashlib.sha256(form.password.data.encode()).hexdigest()  # Hash the password
+        table.insert(dict(username=username, password=password))
+        return redirect(url_for('login'))  # Redirect to the login page after successful registration
+    return render_template('register.html', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
+    form = WTLoginForm()  # Create an instance of the LoginForm class
+    if request.method == 'POST' and form.validate_on_submit():
+        username = form.username.data
+        password = hashlib.sha256(form.password.data.encode()).hexdigest()  # Hash the password
+        user = table.find_one(username=username, password=password)
         if user:
-            if bcrypt.check_password_hash(user.password, form.password.data):
-                login_user(user)
-                return redirect(url_for('dashboard'))
-    return render_template('login.html', form=form)
+            session['username'] = username  # Store username in session
+            return redirect(url_for('home'))  # Redirect to homepage after successful login
+        else:
+            flash('Invalid username or password')  # Show error message
+    return render_template('login.html', form=form)  # Pass the form to the login.html template
 
-
-@app.route('/dashboard', methods=['GET', 'POST'])
-@login_required
+@app.route('/dashboard')
 def dashboard():
-    return render_template('dashboard.html')
+    if 'username' not in session:
+        return redirect(url_for('login'))  # Redirect to login if not logged in
+    return render_template('dashboard.html')  # Render dashboard if logged in
 
-
-@app.route('/logout', methods=['GET', 'POST'])
-@login_required
+@app.route('/logout')
 def logout():
-    logout_user()
+    session.pop('username', None)  # Remove username from session
     return redirect(url_for('login'))
-
-
-@ app.route('/register', methods=['GET', 'POST'])
-def register():
-    form = RegisterForm()
-
-    if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data)
-        new_user = User(username=form.username.data, password=hashed_password)
-        db.session.add(new_user)
-        db.session.commit()
-        return redirect(url_for('login'))
-
-    return render_template('register.html', form=form)
-
 
 if __name__ == "__main__":
     app.run(debug=True)
