@@ -1,14 +1,12 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from forms import LoginForm as WTLoginForm  # Renamed the imported LoginForm
 from flask_wtf import FlaskForm
-from flask_bootstrap import Bootstrap
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length
 import dataset
 import hashlib
 
 app = Flask(__name__)
-Bootstrap(app)
 app.config['SECRET_KEY'] = 'thisisasecretkey'
 
 # Connect to the SQLite database
