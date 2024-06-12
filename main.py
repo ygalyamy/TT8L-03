@@ -49,6 +49,10 @@ def noti():
 def bookofthemonth():
     return render_template("book_of_the_month.html")
 
+@app.route('/index')
+def index():
+    return render_template("index.html")
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
