@@ -11,24 +11,34 @@
             margin: 0;
             padding: 20px;
             background-color: #f4f4f4;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 150px; /* Add gap between flex items */
         }
 
-        .plus-box {
+        .box, .plus-box {
             width: 170px; /* Width of the square */
             height: 245px; /* Height of the square */
             border: 1px solid #ccc;
             border-radius: 5px;
-            background-color: #fff;
             overflow: hidden;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin: 20px 0; /* Align to the left with some margin at the top and bottom */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .plus-box {
+            background-color: #fff; /* Background color for the plus box */
             position: relative; /* For absolute positioning of content */
         }
 
         .plus-box-header {
             width: 100%;
             height: 100%;
-            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center; /* Center the icon */
@@ -54,10 +64,22 @@
         .plus-box-content.show {
             display: block; /* Show when the class 'show' is added */
         }
+
+        .fiction-box { background-color: #FFCDD2; }
+        .non-fiction-box { background-color: #C8E6C9; }
+        .romance-box { background-color: #F8BBD0; }
+        .horror-box { background-color: #D7CCC8; }
+        .comedy-box { background-color: #FFF9C4; }
+        .comics-manga-box { background-color: #BBDEFB; }
+        .others-box { background-color: #D1C4E9; }
+
+        .box-text {
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
-    <div class="plus-box" onclick="redirectToForm()">
+    <div class="plus-box" onclick="redirectToForm('index.html')">
         <div class="plus-box-header">
             <span class="plus-box-icon">+</span>
         </div>
@@ -65,10 +87,38 @@
             <p>This is the content inside the plus box. It can be anything you want, such as text, images, or other HTML elements.</p>
         </div>
     </div>
+    <div class="box fiction-box" onclick="redirectToForm('fiction.html')">
+        <div class="box-content"></div>
+        <div class="box-text">Fiction</div>
+    </div>
+    <div class="box non-fiction-box" onclick="redirectToForm('non-fiction.html')">
+        <div class="box-content"></div>
+        <div class="box-text">Non-Fiction</div>
+    </div>
+    <div class="box romance-box" onclick="redirectToForm('romance.html')">
+        <div class="box-content"></div>
+        <div class="box-text">Romance</div>
+    </div>
+    <div class="box horror-box" onclick="redirectToForm('horror.html')">
+        <div class="box-content"></div>
+        <div class="box-text">Horror</div>
+    </div>
+    <div class="box comedy-box" onclick="redirectToForm('comedy.html')">
+        <div class="box-content"></div>
+        <div class="box-text">Comedy</div>
+    </div>
+    <div class="box comics-manga-box" onclick="redirectToForm('comics-manga.html')">
+        <div class="box-content"></div>
+        <div class="box-text">Comics/Manga</div>
+    </div>
+    <div class="box others-box" onclick="redirectToForm('others.html')">
+        <div class="box-content"></div>
+        <div class="box-text">Others</div>
+    </div>
 
     <script>
-        function redirectToForm() {
-            window.location.href = 'index.html';
+        function redirectToForm(page) {
+            window.location.href = page;
         }
     </script>
 </body>
