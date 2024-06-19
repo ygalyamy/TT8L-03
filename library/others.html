@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="/Users/jasontanjiasheng/TT8L-03/images/papertrail.png">
-    <title>Book Review Form</title>
+    <title>Book Review Form - Others</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -120,11 +120,10 @@
                 book_rating: document.querySelector('input[name="book_rating"]:checked').value,
                 read_again: document.querySelector('input[name="read_again"]:checked').value,
                 impact_rating: document.querySelector('input[name="impact_rating"]:checked').value,
-                genre: document.getElementById('genre').value,
                 overall_thoughts: document.getElementById('overall_thoughts').value
             };
 
-            // Retrieve existing reviews from local storage
+            // Retrieve existing reviews from local storage or initialize new array
             var existingReviews = JSON.parse(localStorage.getItem('bookReviews')) || [];
 
             // Append new review to existing reviews
@@ -133,16 +132,18 @@
             // Store updated reviews in local storage
             localStorage.setItem('bookReviews', JSON.stringify(existingReviews));
 
-            // Create a text file for the genre
-            var genre = formData.genre;
-            var textFileContent = "Genre: " + genre + "\n";
+            // Create a text file for the review
+            var textFileContent = "Book Rating: " + formData.book_rating + "\n";
+            textFileContent += "Read Again Rating: " + formData.read_again + "\n";
+            textFileContent += "Impact Rating: " + formData.impact_rating + "\n";
+            textFileContent += "Overall Thoughts: " + formData.overall_thoughts + "\n";
 
             var blob = new Blob([textFileContent], { type: 'text/plain' });
             var url = URL.createObjectURL(blob);
 
             var a = document.createElement('a');
             a.href = url;
-            a.download = genre + '.txt';
+            a.download = 'book_review.txt';
             a.click();
             URL.revokeObjectURL(url);
 
