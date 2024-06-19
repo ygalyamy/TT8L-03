@@ -16,7 +16,7 @@
             gap: 150px; /* Add gap between flex items */
         }
 
-        .box, .plus-box {
+        .box {
             width: 170px; /* Width of the square */
             height: 245px; /* Height of the square */
             border: 1px solid #ccc;
@@ -29,24 +29,51 @@
             justify-content: center;
             text-align: center;
             cursor: pointer;
+            background-size: cover; /* Make sure the image covers the whole box */
+            background-repeat: no-repeat; /* Prevent the image from repeating */
         }
 
-        .thriller-box { background-color: rgb(237, 74, 74);}
-        .fiction-box { background-color: #FFCDD2; }
-        .non-fiction-box { background-color: #C8E6C9; }
-        .romance-box { background-color: #F8BBD0; }
-        .horror-box { background-color: #D7CCC8; }
-        .comedy-box { background-color: #FFF9C4; }
-        .comics-manga-box { background-color: #BBDEFB; }
-        .others-box { background-color: #D1C4E9; }
+        .thriller-box {
+            background-image: url('/Users/jasontanjiasheng/TT8L-03/images/thriller.jpeg'); /* Change to your image path */
+        }
+
+        .fiction-box {
+            background-image: url('images/fiction.png'); /* Change to your image path */
+        }
+
+        .non-fiction-box {
+            background-image: url('images/non-fiction.png'); /* Change to your image path */
+        }
+
+        .romance-box {
+            background-image: url('/Users/jasontanjiasheng/TT8L-03/images/romance.jpeg'); /* Change to your image path */
+        }
+
+        .horror-box {
+            background-image: url('/Users/jasontanjiasheng/TT8L-03/images/horror.jpeg'); /* Change to your image path */
+        }
+
+        .comedy-box {
+            background-image: url('images/comedy.png'); /* Change to your image path */
+        }
+
+        .comics-manga-box {
+            background-image: url('images/comics-manga.png'); /* Change to your image path */
+        }
+
+        .others-box {
+            background-image: url('images/others.png'); /* Change to your image path */
+        }
 
         .box-text {
             margin-top: 15px;
+            color: white; /* Add this to make text readable over the background image */
+            text-shadow: 1px 1px 2px black; /* Add this to give text a shadow for better readability */
         }
     </style>
 </head>
 <body>
-    <div class="box thriller-box" onclick="redirectToForm('index.html')">
+    <div class="box thriller-box" onclick="redirectToForm('thriller.html')">
         <div class="box-content"></div>
         <div class="box-text">Thriller</div>
     </div>
