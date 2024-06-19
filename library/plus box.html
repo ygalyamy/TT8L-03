@@ -31,40 +31,7 @@
             cursor: pointer;
         }
 
-        .plus-box {
-            background-color: #fff; /* Background color for the plus box */
-            position: relative; /* For absolute positioning of content */
-        }
-
-        .plus-box-header {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center; /* Center the icon */
-            background-color: #f9f9f9;
-        }
-
-        .plus-box-icon {
-            font-size: 48px; /* Larger font size for the icon */
-        }
-
-        .plus-box-content {
-            padding: 20px;
-            display: none; /* Hidden by default */
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #fff;
-            box-sizing: border-box;
-        }
-
-        .plus-box-content.show {
-            display: block; /* Show when the class 'show' is added */
-        }
-
+        .thriller-box { background-color: rgb(237, 74, 74);}
         .fiction-box { background-color: #FFCDD2; }
         .non-fiction-box { background-color: #C8E6C9; }
         .romance-box { background-color: #F8BBD0; }
@@ -79,13 +46,9 @@
     </style>
 </head>
 <body>
-    <div class="plus-box" onclick="redirectToForm('index.html')">
-        <div class="plus-box-header">
-            <span class="plus-box-icon">+</span>
-        </div>
-        <div class="plus-box-content" id="plusBoxContent">
-            <p>This is the content inside the plus box. It can be anything you want, such as text, images, or other HTML elements.</p>
-        </div>
+    <div class="box thriller-box" onclick="redirectToForm('index.html')">
+        <div class="box-content"></div>
+        <div class="box-text">Thriller</div>
     </div>
     <div class="box fiction-box" onclick="redirectToForm('index.html')">
         <div class="box-content"></div>
