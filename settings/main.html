@@ -129,17 +129,74 @@
 </head>
 <body>
     <nav>
-        <a onclick="redirectToForm('')">HOME</a>
+        <a onclick="redirectToForm('/Users/jasontanjiasheng/TT8L-03/library/comedy.html')">HOME</a>
         <a onclick="redirectToForm('/Users/jasontanjiasheng/TT8L-03/library/genre.html')">LIBRARY</a>
-        <a onclick="redirectToForm('')">BOOK OF THE MONTH</a>
+        <a onclick="redirectToForm('/Users/jasontanjiasheng/TT8L-03/library/comics-manga.html')">BOOK OF THE MONTH</a>
         <a onclick="redirectToForm('/Users/jasontanjiasheng/TT8L-03/settings/settings.html')">SETTINGS</a>
     </nav>
 <hr>
 
     <script>
+
+function setLightTheme() {
+            document.body.classList.remove("dark-theme");
+            document.getElementById("light-switch").checked = true;
+            document.getElementById("dark-switch").checked = false;
+            localStorage.setItem("theme", "light");
+        }
+
+        function setDarkTheme() {
+            document.body.classList.add("dark-theme");
+            document.getElementById("light-switch").checked = false;
+            document.getElementById("dark-switch").checked = true;
+            localStorage.setItem("theme", "dark");
+        }
+
+        function toggleLightTheme() {
+            if (document.getElementById("light-switch").checked) {
+                setLightTheme();
+            } else {
+                setDarkTheme();
+            }
+        }
+
+        function toggleDarkTheme() {
+            if (document.getElementById("dark-switch").checked) {
+                setDarkTheme();
+            } else {
+                setLightTheme();
+            }
+        }
+
+        function applyTextSize() {
+            const textSize = document.getElementById('text_size').value + 'px';
+            document.documentElement.style.setProperty('--text-size', textSize);
+        }
+
+        window.onload = function() {
+            const theme = localStorage.getItem("theme");
+            if (theme === "dark") {
+                setDarkTheme();
+            } else {
+                setLightTheme();
+            }
+            const textSize = localStorage.getItem('text-size');
+            if (textSize) {
+                document.documentElement.style.setProperty('--text-size', textSize);
+                document.getElementById('text_size').value = parseInt(textSize);
+            }
+        };
+
+        function applyTextSize() {
+            const textSize = document.getElementById('text_size').value + 'px';
+            document.documentElement.style.setProperty('--text-size', textSize);
+            localStorage.setItem('text-size', textSize);
+        }
+
         function redirectToForm(url) {
             window.location.href = url;
         }
+
     </script>
 </body>
 </html>
