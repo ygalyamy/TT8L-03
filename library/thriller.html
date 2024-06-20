@@ -15,7 +15,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f0f0f0;
+            background-color: #ffffff;
         }
         .dark-theme {
             background-color: #1f1f1f;
@@ -56,13 +56,13 @@
             display: block;
             margin-bottom: 5px;
         }
-        .form-group input[type="radio"], .form-group select, .form-group textarea {
+        .form-group input[type="radio"], .form-group select, .form-group textarea, .form-group input[type="text"] {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-        .dark-theme .form-group input[type="radio"], .dark-theme .form-group select, .dark-theme .form-group textarea {
+        .dark-theme .form-group input[type="radio"], .dark-theme .form-group select, .dark-theme .form-group textarea, .dark-theme .form-group input[type="text"] {
             border-color: #777;
             background-color: #444;
             color: white;
@@ -129,6 +129,11 @@
             <label for="overall_thoughts">4. What are your overall thoughts on the book?</label>
             <textarea id="overall_thoughts" name="overall_thoughts" rows="4" required></textarea>
         </div>
+        <!-- Date of Review -->
+        <div class="form-group">
+            <label for="review_date">Date of Review:</label>
+            <input type="text" id="review_date" name="review_date" readonly>
+        </div>
         <!-- Submit Button -->
         <div class="form-group">
             <input type="submit" value="Submit">
@@ -136,75 +141,83 @@
     </form>
 </div>
 
+<script>
+    // Function to handle form submission
+    function submitForm(event) {
+        event.preventDefault(); // Prevent default form submission
 
-    <script>
+        // Collect form data
+        var formData = {
+            book_rating: document.querySelector('input[name="book_rating"]:checked').value,
+            read_again: document.querySelector('input[name="read_again"]:checked').value,
+            impact_rating: document.querySelector('input[name="impact_rating"]:checked').value,
+            overall_thoughts: document.getElementById('overall_thoughts').value,
+            review_date: getCurrentDate() // Add current date
+        };
 
-                // Function to handle form submission
-                function submitForm(event) {
-            event.preventDefault(); // Prevent default form submission
+        // Retrieve existing reviews from local storage or initialize new array
+        var existingReviews = JSON.parse(localStorage.getItem('bookReviews')) || [];
 
-            // Collect form data
-            var formData = {
-                book_rating: document.querySelector('input[name="book_rating"]:checked').value,
-                read_again: document.querySelector('input[name="read_again"]:checked').value,
-                impact_rating: document.querySelector('input[name="impact_rating"]:checked').value,
-                overall_thoughts: document.getElementById('overall_thoughts').value
-            };
+        // Append new review to existing reviews
+        existingReviews.push(formData);
 
-            // Retrieve existing reviews from local storage or initialize new array
-            var existingReviews = JSON.parse(localStorage.getItem('bookReviews')) || [];
+        // Store updated reviews in local storage
+        localStorage.setItem('bookReviews', JSON.stringify(existingReviews));
 
-            // Append new review to existing reviews
-            existingReviews.push(formData);
+        // Create a text file for the review
+        var textFileContent = "Book Rating: " + formData.book_rating + "\n";
+        textFileContent += "Read Again Rating: " + formData.read_again + "\n";
+        textFileContent += "Impact Rating: " + formData.impact_rating + "\n";
+        textFileContent += "Overall Thoughts: " + formData.overall_thoughts + "\n";
+        textFileContent += "Review Date: " + formData.review_date + "\n";
 
-            // Store updated reviews in local storage
-            localStorage.setItem('bookReviews', JSON.stringify(existingReviews));
+        var blob = new Blob([textFileContent], { type: 'text/plain' });
+        var url = URL.createObjectURL(blob);
 
-            // Create a text file for the review
-            var textFileContent = "Book Rating: " + formData.book_rating + "\n";
-            textFileContent += "Read Again Rating: " + formData.read_again + "\n";
-            textFileContent += "Impact Rating: " + formData.impact_rating + "\n";
-            textFileContent += "Overall Thoughts: " + formData.overall_thoughts + "\n";
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'book_review.txt';
+        a.click();
+        URL.revokeObjectURL(url);
 
-            var blob = new Blob([textFileContent], { type: 'text/plain' });
-            var url = URL.createObjectURL(blob);
+        // Reset the form
+        document.getElementById('bookReviewForm').reset();
 
-            var a = document.createElement('a');
-            a.href = url;
-            a.download = 'book_review.txt';
-            a.click();
-            URL.revokeObjectURL(url);
+        // Display success message or perform any other action as needed
+        alert('Thank you for your review!');
+    }
 
-            // Reset the form
-            document.getElementById('bookReviewForm').reset();
+    // Add form submission event listener
+    document.getElementById('bookReviewForm').addEventListener('submit', submitForm);
 
-            // Display success message or perform any other action as needed
-            alert('Thank you for your review!');
+    // Function to get current date
+    function getCurrentDate() {
+        var now = new Date();
+        var date = now.getDate();
+        var month = now.getMonth() + 1;
+        var year = now.getFullYear();
+        return `${year}-${month}-${date}`;
+    }
+
+    // Set current date when the form loads
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('review_date').value = getCurrentDate();
+    });
+
+    window.onload = function() {
+        const theme = localStorage.getItem("theme");
+        if (theme === "dark") {
+            document.body.classList.add("dark-theme");
+        } else {
+            document.body.classList.remove("dark-theme");
         }
+        const textSize = localStorage.getItem('text-size');
+        if (textSize) {
+            document.documentElement.style.setProperty('--text-size', textSize);
+            document.getElementById('text_size').value = parseInt(textSize);
+        }
+    };
 
-        // Add form submission event listener
-        document.getElementById('bookReviewForm').addEventListener('submit', submitForm);
-
-        window.onload = function() {
-            const theme = localStorage.getItem("theme");
-            if (theme === "dark") {
-                document.body.classList.add("dark-theme");
-            } else {
-                document.body.classList.remove("dark-theme");
-            }
-        };
-
-        document.getElementById('bookReviewForm').onsubmit = function(event) {
-            event.preventDefault();
-
-            const formData = new FormData(this);
-            let reviewData = {};
-            formData.forEach((value, key) => {
-                reviewData[key] = value;
-            });
-
-            console.log('Review Data:', reviewData);
-        };
-    </script>
+</script>
 </body>
 </html>
