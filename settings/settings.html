@@ -6,7 +6,7 @@
     <link rel="icon" type="image/png" href="/Users/jasontanjiasheng/TT8L-03/images/papertrail.png">
     <title>Settings</title>
     <style>
-        /* Light theme styles */
+        /* Light and Dark theme styles */
         :root {
             --background-color: #ffffff;
             --text-color: #000000;
@@ -19,7 +19,6 @@
             --text-size: 16px;
         }
 
-        /* Dark theme styles */
         .dark-theme {
             --background-color: #1f1f1f;
             --text-color: #ffffff;
@@ -129,6 +128,7 @@
 
         nav a {
             margin-right: 20px;
+            font-size: var(--text-size);
             text-decoration: none;
             color: var(--text-color);
             cursor: pointer; /* Add cursor pointer to indicate clickable links */
@@ -138,11 +138,11 @@
 </head>
 <body>
     <nav>
-        <a onclick="redirectToForm('/Users/jasontanjiasheng/TT8L-03/library/comedy.html')">HOME</a>
+        <a onclick="redirectToForm('/Users/jasontanjiasheng/TT8L-03/settings/main.html')">HOME</a>
         <a onclick="redirectToForm('/Users/jasontanjiasheng/TT8L-03/library/genre.html')">LIBRARY</a>
         <a onclick="redirectToForm('/Users/jasontanjiasheng/TT8L-03/library/comics-manga.html')">BOOK OF THE MONTH</a>
     </nav>
-<hr>
+    <hr>
     <div class="container">
         <div class="button-container">
             <button onclick="setLightTheme()">Light Theme</button>
@@ -200,7 +200,23 @@
         function applyTextSize() {
             const textSize = document.getElementById('text_size').value + 'px';
             document.documentElement.style.setProperty('--text-size', textSize);
+            localStorage.setItem('text-size', textSize);
+
+            // Broadcast the text size change to other pages using postMessage
+            const message = {
+                type: 'textSizeChange',
+                textSize: textSize
+            };
+            window.postMessage(message, '*'); // '*' allows sending to all origins
         }
+
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'textSizeChange') {
+                const textSize = event.data.textSize;
+                document.documentElement.style.setProperty('--text-size', textSize);
+                localStorage.setItem('text-size', textSize); // Update localStorage on receiving message
+            }
+        });
 
         window.onload = function() {
             const theme = localStorage.getItem("theme");
@@ -211,22 +227,14 @@
             }
             const textSize = localStorage.getItem('text-size');
             if (textSize) {
-                document.documentElement.style.setProperty('--text-size', textSize);
                 document.getElementById('text_size').value = parseInt(textSize);
+                document.documentElement.style.setProperty('--text-size', textSize);
             }
         };
-
-        function applyTextSize() {
-            const textSize = document.getElementById('text_size').value + 'px';
-            document.documentElement.style.setProperty('--text-size', textSize);
-            localStorage.setItem('text-size', textSize);
-        }
 
         function redirectToForm(url) {
             window.location.href = url;
         }
-
     </script>
-
 </body>
 </html>

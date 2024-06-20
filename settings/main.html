@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="/Users/jasontanjiasheng/TT8L-03/images/papertrail.png">
-    <title>PaperTrail</title>
+    <title>Main Page</title>
     <style>
-        /* Light theme styles */
+        /* Light and Dark theme styles */
         :root {
             --background-color: #ffffff;
             --text-color: #000000;
@@ -19,7 +19,6 @@
             --text-size: 16px;
         }
 
-        /* Dark theme styles */
         .dark-theme {
             --background-color: #1f1f1f;
             --text-color: #ffffff;
@@ -37,6 +36,13 @@
             font-family: Arial, sans-serif;
             font-size: var(--text-size);
             padding: 10px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            max-width: 300px;
         }
 
         .button-container {
@@ -100,11 +106,9 @@
         h1 {
             font-size: var(--text-size);
             margin-bottom: 20px;
-            text-align: center;
         }
 
         form {
-            text-align: center;
             margin-bottom: 20px;
         }
 
@@ -120,34 +124,34 @@
 
         p {
             font-size: var(--text-size);
-            text-align: center;
         }
 
         nav a {
             margin-right: 20px;
+            font-size: var(--text-size);
             text-decoration: none;
             color: var(--text-color);
             cursor: pointer; /* Add cursor pointer to indicate clickable links */
-        }
-
-        #content {
-            margin-top: 20px;
         }
 
     </style>
 </head>
 <body>
     <nav>
-        <a onclick="redirectToForm('/Users/jasontanjiasheng/TT8L-03/library/comedy.html')">HOME</a>
+        <a onclick="redirectToForm('/Users/jasontanjiasheng/TT8L-03/settings/main.html')">HOME</a>
         <a onclick="redirectToForm('/Users/jasontanjiasheng/TT8L-03/library/genre.html')">LIBRARY</a>
         <a onclick="redirectToForm('/Users/jasontanjiasheng/TT8L-03/library/comics-manga.html')">BOOK OF THE MONTH</a>
         <a onclick="redirectToForm('/Users/jasontanjiasheng/TT8L-03/settings/settings.html')">SETTINGS</a>
     </nav>
-<hr>
+    <hr>
+    <div class="container">
+        <!-- Removed the theme switcher -->
+        <h1>Main Page</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae elit libero, a pharetra augue.</p>
+    </div>
 
     <script>
-
-function setLightTheme() {
+        function setLightTheme() {
             document.body.classList.remove("dark-theme");
             document.getElementById("light-switch").checked = true;
             document.getElementById("dark-switch").checked = false;
@@ -180,7 +184,23 @@ function setLightTheme() {
         function applyTextSize() {
             const textSize = document.getElementById('text_size').value + 'px';
             document.documentElement.style.setProperty('--text-size', textSize);
+            localStorage.setItem('text-size', textSize);
+
+            // Broadcast the text size change to other pages using postMessage
+            const message = {
+                type: 'textSizeChange',
+                textSize: textSize
+            };
+            window.postMessage(message, '*'); // '*' allows sending to all origins
         }
+
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'textSizeChange') {
+                const textSize = event.data.textSize;
+                document.documentElement.style.setProperty('--text-size', textSize);
+                localStorage.setItem('text-size', textSize); // Update localStorage on receiving message
+            }
+        });
 
         window.onload = function() {
             const theme = localStorage.getItem("theme");
@@ -192,20 +212,12 @@ function setLightTheme() {
             const textSize = localStorage.getItem('text-size');
             if (textSize) {
                 document.documentElement.style.setProperty('--text-size', textSize);
-                document.getElementById('text_size').value = parseInt(textSize);
             }
         };
-
-        function applyTextSize() {
-            const textSize = document.getElementById('text_size').value + 'px';
-            document.documentElement.style.setProperty('--text-size', textSize);
-            localStorage.setItem('text-size', textSize);
-        }
 
         function redirectToForm(url) {
             window.location.href = url;
         }
-
     </script>
 </body>
 </html>
