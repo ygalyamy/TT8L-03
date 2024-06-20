@@ -22,21 +22,37 @@
         h1 {
             text-align: center;
             color: #15b794;
+            margin-bottom: 20px;
         }
         .book-item {
-            margin-bottom: 15px;
-            padding: 10px;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background-color: #fff;
             border-bottom: 1px solid #ddd;
         }
-        .book-item:last-child {
-            border-bottom: none;
+         .book-item:last-child {
+            margin-bottom: 0;
         }
         .book-title {
-            font-size: 1.2em;
+            font-size: 1.4em;
             color: #333;
+            margin-bottom: 10px;
         }
         .book-rating {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .book-thoughts {
+            font-style: italic;
+        }
+        .book-date {
             color: #888;
+            font-size: 0.9em;
+        }
+        .read-again {
+            font-size: 0.9em;
         }
     </style>
 </head>
@@ -67,9 +83,11 @@
                 var bookItem = document.createElement('div');
                 bookItem.classList.add('book-item');
                 bookItem.innerHTML = `
-                    <div class="book-title">Genre: ${book.genre}</div>
                     <div class="book-rating">Rating: ${book.book_rating}</div>
+                    <div class="book-rating">Impact Rating: ${book.impact_rating}</div>
+                    <div class="book-date">Review Date: ${book.review_date}</div>
                     <div class="book-thoughts">Thoughts: ${book.overall_thoughts}</div>
+                    <div class="read-again">Read Again: ${book.read_again}</div>
                 `;
                 booksContainer.appendChild(bookItem);
             });
