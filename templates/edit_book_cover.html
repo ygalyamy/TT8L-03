@@ -183,7 +183,8 @@
             }).then(Response => Response.json())
             .then (data => {
                 if (data.success) {
-                    window.location.href = "{{ url_for('bookcover') }}";
+                    localStorage.setItem('bookCoverImagePath', data.image_path);
+                    window.location.href = "{{ url_for('fictionreviews') }}";
                 } 
             });
         }
@@ -313,7 +314,6 @@
 
             });
         }
-
     </script>
 </body>
 </html>
