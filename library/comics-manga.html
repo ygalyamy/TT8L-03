@@ -211,11 +211,6 @@
         } else {
             document.body.classList.remove("dark-theme");
         }
-        const textSize = localStorage.getItem('text-size');
-        if (textSize) {
-            document.documentElement.style.setProperty('--text-size', textSize);
-            document.getElementById('text_size').value = parseInt(textSize);
-        }
     };
 
 </script>
