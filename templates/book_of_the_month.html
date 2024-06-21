@@ -30,9 +30,8 @@
             border-radius: 8px;
             border: 1px solid #ddd;
             background-color: #fff;
-            border-bottom: 1px solid #ddd;
         }
-         .book-item:last-child {
+        .book-item:last-child {
             margin-bottom: 0;
         }
         .book-title {
@@ -64,39 +63,61 @@
 
     <script>
         // Retrieve data from local storage
-        var bookReviews = JSON.parse(localStorage.getItem('bookReviews'));
+        var fictionReviews = JSON.parse(localStorage.getItem('fictionbookReviews'));
+        var comedyReviews = JSON.parse(localStorage.getItem('comedybookReviews'));
+        var horrorReviews = JSON.parse(localStorage.getItem('horrorbookReviews'));
+        var nonfictionReviews = JSON.parse(localStorage.getItem('nonfictionbookReviews'));
+        var othersReviews = JSON.parse(localStorage.getItem('othersbookReviews'));
+        var mangaReviews = JSON.parse(localStorage.getItem('mangabookReviews'));
+        var thrillerReviews = JSON.parse(localStorage.getItem('thrillerbookReviews'));
+        var romanceReviews = JSON.parse(localStorage.getItem('romancebookReviews'));
 
-        console.log('Retrieved book reviews:', bookReviews); // Check if book reviews are retrieved correctly
+        console.log('Retrieved book reviews:', { fictionReviews, comedyReviews, horrorReviews, nonfictionReviews, othersReviews, mangaReviews, thrillerReviews, romanceReviews }); // Check if book reviews are retrieved correctly
 
-        // Check if bookReviews is not null before sorting and displaying
-        if (bookReviews) {
-            console.log('Sorting book reviews...');
-            bookReviews.sort(function(a, b) {
-                return parseInt(b.book_rating) - parseInt(a.book_rating);
-            });
+        // Function to sort and display reviews
+        function sortAndDisplayReviews(reviews, category) {
+            if (reviews) {
+                // Sort reviews by book rating
+                reviews.sort(function(a, b) {
+                    return parseInt(b.book_rating) - parseInt(a.book_rating);
+                });
 
-            console.log('Sorted book reviews:', bookReviews); // Check if book reviews are sorted correctly
+                // Display sorted reviews
+                var booksContainer = document.getElementById('booksContainer');
+                var categoryHeader = document.createElement('h2');
+                categoryHeader.textContent = category + ' Books';
+                booksContainer.appendChild(categoryHeader);
 
-            // Display the sorted book reviews on the page
-            var booksContainer = document.getElementById('booksContainer');
-            bookReviews.forEach(function(book) {
-                var bookItem = document.createElement('div');
-                bookItem.classList.add('book-item');
-                bookItem.innerHTML = `
-                    <div class="book-rating">Rating: ${book.book_rating}</div>
-                    <div class="book-rating">Impact Rating: ${book.impact_rating}</div>
-                    <div class="book-date">Review Date: ${book.review_date}</div>
-                    <div class="book-thoughts">Thoughts: ${book.overall_thoughts}</div>
-                    <div class="read-again">Read Again: ${book.read_again}</div>
-                `;
-                booksContainer.appendChild(bookItem);
-            });
-        } else {
-            console.log('No book reviews found in local storage.');
+                reviews.forEach(function(book) {
+                    var bookItem = document.createElement('div');
+                    bookItem.classList.add('book-item');
+                    bookItem.innerHTML = `
+                        <div class="book-rating">Rating: ${book.book_rating}</div>
+                        <div class="book-rating">Impact Rating: ${book.impact_rating}</div>
+                        <div class="book-date">Review Date: ${book.review_date}</div>
+                        <div class="book-thoughts">Thoughts: ${book.overall_thoughts}</div>
+                        <div class="read-again">Read Again: ${book.read_again}</div>
+                    `;
+                    booksContainer.appendChild(bookItem);
+                });
+            } else {
+                console.log(`No ${category.toLowerCase()} book reviews found in local storage.`);
+            }
         }
+
+        // Sort and display each category of reviews
+        sortAndDisplayReviews(fictionReviews, 'Fiction');
+        sortAndDisplayReviews(comedyReviews, 'Comedy');
+        sortAndDisplayReviews(horrorReviews, 'Horror');
+        sortAndDisplayReviews(nonfictionReviews, 'Non-Fiction');
+        sortAndDisplayReviews(othersReviews, 'Others');
+        sortAndDisplayReviews(mangaReviews, 'Manga');
+        sortAndDisplayReviews(thrillerReviews, 'Thriller');
+        sortAndDisplayReviews(romanceReviews, 'Romance');
     </script>
 </body>
 </html>
+
 
 
 

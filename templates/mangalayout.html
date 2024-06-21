@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fiction Book Reviews</title>
+    <title>Manga/Comics Book Reviews</title>
     <style>
         /* Styling for review items */
         * {
@@ -98,15 +98,15 @@
     </style>
 </head>
 <body>
-    <h1>Fiction Book Reviews</h1>
+    <h1>Manga/Comics Book Reviews</h1>
 
     <div id="reviewsContainer"></div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Retrieve reviews from localStorage or fetch from server
-            var reviews = JSON.parse(localStorage.getItem('fictionbookReviews')) || [];
-            var genre = 'fiction';
+            var reviews = JSON.parse(localStorage.getItem('mangabookReviews')) || [];
+            var genre = 'manga';
 
             // Display each review
             var reviewsContainer = document.getElementById('reviewsContainer');
@@ -114,12 +114,10 @@
                 var reviewItem = document.createElement('div');
                 reviewItem.classList.add('review-item');
 
-                // Get the cover image path from the review object
-                var image_path = review.cover_image || 'images/bookcover.png'; // Replace with default image path
-
                 // Fetch the latest image path from localStorage
-                var imageExists = localStorage.getItem('bookCoverImagePath') !== null;
-                var image_path = localStorage.getItem('bookCoverImagePath') || 'images/default_cover.png'; // Replace with default image path
+                var localStorageKey = genre === 'manga' ? 'mangaBookCoverImagePath' : 'fictionBookCoverImagePath';
+                var imageExists = localStorage.getItem(localStorageKey) !== null;
+                var image_path = localStorage.getItem(localStorageKey) || 'images/default_cover.png'; // Replace with default image path
 
                 // Create cover image or placeholder
                 var coverContainer = document.createElement('div');
@@ -149,7 +147,7 @@
                     <p><strong>Impact Rating:</strong> ${review.impact_rating}</p>
                     <p><strong>Overall Thoughts:</strong> ${review.overall_thoughts}</p>
                     <p class="review-details"><strong>Review Date:</strong> ${review.review_date}</p>
-                    <a href="{{ url_for('edit_book_cover') }}" class="edit-button">Edit</a>
+                    <a href="{{ url_for('manga_edit_book_cover') }}" class="edit-button">Edit</a>
                 `;
 
                 // Append cover and content to review item
@@ -163,8 +161,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
