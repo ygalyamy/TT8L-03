@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/Users/jasontanjiasheng/TT8L-03/images/papertrail.png">
+    <title>Settings</title>
+    <style>
+        /* Light and Dark theme styles */
+        :root {
+            --background-color: #ffffff;
+            --text-color: #000000;
+            --button-background-color: #ffffff;
+            --button-text-color: #000000;
+            --button-border-color: #000000;
+            --toggle-background: #cccccc;
+            --toggle-color: hsl(120, 91%, 48%);
+            --toggle-knob: #ffffff;
+            --text-size: 16px;
+        }
+
+        .dark-theme {
+            --background-color: #1f1f1f;
+            --text-color: #ffffff;
+            --button-background-color: #1f1f1f;
+            --button-text-color: #ffffff;
+            --button-border-color: #ffffff;
+            --toggle-background: #333;
+            --toggle-color: hsl(120, 91%, 48%);
+            --toggle-knob: #ffffff;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-family: Arial, sans-serif;
+            font-size: var(--text-size);
+            padding: 10px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            max-width: 300px;
+        }
+
+        .button-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: var(--button-background-color);
+            color: var(--button-text-color);
+            border: 1px solid var(--button-border-color);
+            padding: 10px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: var(--text-size);
+        }
+
+        .switch {
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+            background-color: var(--toggle-background);
+            border-radius: 34px;
+            cursor: pointer;
+            transition: background-color 0.4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: var(--toggle-knob);
+            border-radius: 50%;
+            transition: transform 0.4s;
+        }
+
+        input:checked + .slider {
+            background-color: var(--toggle-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        h1 {
+            font-size: var(--text-size);
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: var(--text-size);
+        }
+
+        input[type="number"] {
+            width: 100px;
+            padding: 5px;
+            font-size: var(--text-size);
+        }
+
+        p {
+            font-size: var(--text-size);
+        }
+
+        nav a {
+            margin-right: 20px;
+            font-size: var(--text-size);
+            text-decoration: none;
+            color: var(--text-color);
+            cursor: pointer; /* Add cursor pointer to indicate clickable links */
+        }
+
+    </style>
+</head>
+<body>
+    <nav>
+        <a onclick="redirectToForm('/Users/jasontanjiasheng/TT8L-03/settings/main.html')">HOME</a>
+        <a onclick="redirectToForm('/Users/jasontanjiasheng/TT8L-03/library/genre.html')">LIBRARY</a>
+        <a onclick="redirectToForm('/Users/jasontanjiasheng/TT8L-03/library/comics-manga.html')">BOOK OF THE MONTH</a>
+    </nav>
+    <hr>
+    <div class="container">
+        <div class="button-container">
+            <button onclick="setLightTheme()">Light Theme</button>
+            <label class="switch">
+                <input type="checkbox" id="light-switch" onchange="toggleLightTheme()">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="button-container">
+            <button onclick="setDarkTheme()">Dark Theme</button>
+            <label class="switch">
+                <input type="checkbox" id="dark-switch" onchange="toggleDarkTheme()">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <h1>Text Size Customization</h1>
+        <form>
+            <label for="text_size">Enter text size (in pixels):</label>
+            <input type="number" id="text_size" name="text_size" required>
+            <button type="button" onclick="applyTextSize()">Apply</button>
+        </form>
+    </div>
+
+    <script>
+        function setLightTheme() {
+            document.body.classList.remove("dark-theme");
+            document.getElementById("light-switch").checked = true;
+            document.getElementById("dark-switch").checked = false;
+            localStorage.setItem("theme", "light");
+        }
+
+        function setDarkTheme() {
+            document.body.classList.add("dark-theme");
+            document.getElementById("light-switch").checked = false;
+            document.getElementById("dark-switch").checked = true;
+            localStorage.setItem("theme", "dark");
+        }
+
+        function toggleLightTheme() {
+            if (document.getElementById("light-switch").checked) {
+                setLightTheme();
+            } else {
+                setDarkTheme();
+            }
+        }
+
+        function toggleDarkTheme() {
+            if (document.getElementById("dark-switch").checked) {
+                setDarkTheme();
+            } else {
+                setLightTheme();
+            }
+        }
+
+        function applyTextSize() {
+            const textSize = document.getElementById('text_size').value + 'px';
+            document.documentElement.style.setProperty('--text-size', textSize);
+            localStorage.setItem('text-size', textSize);
+
+            // Broadcast the text size change to other pages using postMessage
+            const message = {
+                type: 'textSizeChange',
+                textSize: textSize
+            };
+            window.postMessage(message, '*'); // '*' allows sending to all origins
+        }
+
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'textSizeChange') {
+                const textSize = event.data.textSize;
+                document.documentElement.style.setProperty('--text-size', textSize);
+                localStorage.setItem('text-size', textSize); // Update localStorage on receiving message
+            }
+        });
+
+        window.onload = function() {
+            const theme = localStorage.getItem("theme");
+            if (theme === "dark") {
+                setDarkTheme();
+            } else {
+                setLightTheme();
+            }
+            const textSize = localStorage.getItem('text-size');
+            if (textSize) {
+                document.getElementById('text_size').value = parseInt(textSize);
+                document.documentElement.style.setProperty('--text-size', textSize);
+            }
+        };
+
+        function redirectToForm(url) {
+            window.location.href = url;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/Users/jasontanjiasheng/TT8L-03/images/papertrail.png">
+    <title>Book Review Form - Others</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('/Users/jasontanjiasheng/TT8L-03/images/others.JPG');
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ffffff;
+        }
+        .dark-theme {
+            background-color: #1f1f1f;
+            color: #ffffff;
+        }
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+        .dark-theme .form-container {
+            background-color: #1f1f1f;
+            color: white;
+        }
+        .form-container h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+        .dark-theme .form-container h1 {
+            color: #80e27e;
+        }
+        .form-container p {
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 20px;
+            color: #555;
+        }
+        .dark-theme .form-container p {
+            color: #ddd;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input[type="radio"], .form-group select, .form-group textarea, .form-group input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .dark-theme .form-group input[type="radio"], .dark-theme .form-group select, .dark-theme .form-group textarea, .dark-theme .form-group input[type="text"] {
+            border-color: #777;
+            background-color: #444;
+            color: white;
+        }
+        .form-group input[type="radio"] {
+            width: auto;
+            margin-right: 10px;
+        }
+        .form-group input[type="submit"] {
+            width: auto;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 4px;
+        }
+        .dark-theme .form-group input[type="submit"] {
+            background-color: #80e27e;
+            color: black;
+        }
+        .form-group input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .dark-theme .form-group input[type="submit"]:hover {
+            background-color: #66bb6a;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Book Review</h1>
+        <p>Please rate from 1-5 according to your personal preference.</p>
+        <form id="bookReviewForm">
+            <!-- Question 1 -->
+            <div class="form-group">
+                <label>1. How good was the book? (1-5)</label>
+                <label><input type="radio" name="book_rating" value="1" required> 1</label>
+                <label><input type="radio" name="book_rating" value="2"> 2</label>
+                <label><input type="radio" name="book_rating" value="3"> 3</label>
+                <label><input type="radio" name="book_rating" value="4"> 4</label>
+                <label><input type="radio" name="book_rating" value="5"> 5</label>
+            </div>
+           <!-- Question 2 -->
+           <div class="form-group">
+            <label>2. Would you read it again? (1-5)</label>
+            <label><input type="radio" name="read_again" value="1" required> 1</label>
+            <label><input type="radio" name="read_again" value="2"> 2</label>
+            <label><input type="radio" name="read_again" value="3"> 3</label>
+            <label><input type="radio" name="read_again" value="4"> 4</label>
+            <label><input type="radio" name="read_again" value="5"> 5</label>
+        </div>
+        <!-- Question 3 -->
+        <div class="form-group">
+            <label>3. How impactful were the passages/quotes that resonated with you? (1-5)</label>
+            <label><input type="radio" name="impact_rating" value="1" required> 1</label>
+            <label><input type="radio" name="impact_rating" value="2"> 2</label>
+            <label><input type="radio" name="impact_rating" value="3"> 3</label>
+            <label><input type="radio" name="impact_rating" value="4"> 4</label>
+            <label><input type="radio" name="impact_rating" value="5"> 5</label>
+        </div>
+        <!-- Question 4 -->
+        <div class="form-group">
+            <label for="overall_thoughts">4. What are your overall thoughts on the book?</label>
+            <textarea id="overall_thoughts" name="overall_thoughts" rows="4" required></textarea>
+        </div>
+        <!-- Date of Review -->
+        <div class="form-group">
+            <label for="review_date">Date of Review:</label>
+            <input type="text" id="review_date" name="review_date" readonly>
+        </div>
+        <!-- Submit Button -->
+        <div class="form-group">
+            <input type="submit" value="Submit">
+        </div>
+    </form>
+</div>
+
+<script>
+    // Function to handle form submission
+    function submitForm(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        // Collect form data
+        var formData = {
+            book_rating: document.querySelector('input[name="book_rating"]:checked').value,
+            read_again: document.querySelector('input[name="read_again"]:checked').value,
+            impact_rating: document.querySelector('input[name="impact_rating"]:checked').value,
+            overall_thoughts: document.getElementById('overall_thoughts').value,
+            review_date: getCurrentDate() // Add current date
+        };
+
+        // Retrieve existing reviews from local storage or initialize new array
+        var existingReviews = JSON.parse(localStorage.getItem('bookReviews')) || [];
+
+        // Append new review to existing reviews
+        existingReviews.push(formData);
+
+        // Store updated reviews in local storage
+        localStorage.setItem('bookReviews', JSON.stringify(existingReviews));
+
+        // Create a text file for the review
+        var textFileContent = "Book Rating: " + formData.book_rating + "\n";
+        textFileContent += "Read Again Rating: " + formData.read_again + "\n";
+        textFileContent += "Impact Rating: " + formData.impact_rating + "\n";
+        textFileContent += "Overall Thoughts: " + formData.overall_thoughts + "\n";
+        textFileContent += "Review Date: " + formData.review_date + "\n";
+
+        var blob = new Blob([textFileContent], { type: 'text/plain' });
+        var url = URL.createObjectURL(blob);
+
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'book_review.txt';
+        a.click();
+        URL.revokeObjectURL(url);
+
+        // Reset the form
+        document.getElementById('bookReviewForm').reset();
+
+        // Display success message or perform any other action as needed
+        alert('Thank you for your review!');
+    }
+
+    // Add form submission event listener
+    document.getElementById('bookReviewForm').addEventListener('submit', submitForm);
+
+    // Function to get current date
+    function getCurrentDate() {
+        var now = new Date();
+        var date = now.getDate();
+        var month = now.getMonth() + 1;
+        var year = now.getFullYear();
+        return `${year}-${month}-${date}`;
+    }
+
+    // Set current date when the form loads
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('review_date').value = getCurrentDate();
+    });
+
+    window.onload = function() {
+        const theme = localStorage.getItem("theme");
+        if (theme === "dark") {
+            document.body.classList.add("dark-theme");
+        } else {
+            document.body.classList.remove("dark-theme");
+        }
+        const textSize = localStorage.getItem('text-size');
+        if (textSize) {
+            document.documentElement.style.setProperty('--text-size', textSize);
+            document.getElementById('text_size').value = parseInt(textSize);
+        }
+    };
+
+</script>
+</body>
+</html>
