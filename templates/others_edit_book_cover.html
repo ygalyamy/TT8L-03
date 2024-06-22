@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.5.0/fabric.min.js"></script>
+    <title>Edit Comedy Book Cover</title>
+    <style>
+        .toolbar-right {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: absolute;
+            gap: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 300px;
+        }
+        .color-picker-container, .drawing-container, .shape-container, .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        .quote-container {
+            display: flex;
+            gap: 10px;
+        }
+        .quote-save-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        input[type="color"] {
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            width: 200px;
+        }
+        .btn {
+            background-color: #000000A0;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            width: 100px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            font-family: sans-serif;
+        }
+        .btn:hover {
+            background-color: #000000;
+        }
+        #imageLoader, #colorPicker {
+            display: none;
+        }
+        #quoteinput {
+            margin-right: 10px;
+        }
+        #drawingcanvas {
+            border: 2px solid black;
+        }
+        .canvas-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="toolbar-right">
+            <div class="shape-container">
+                <button onclick="addRectangle()" class="btn" title="Add Rectangle"><i class="fas fa-square"></i></button>
+            </div>
+            <div class="shape-container">
+                <button onclick="addCircle()" class="btn" title="Add Circle"><i class="fas fa-circle"></i></button>
+            </div>
+            <div class="drawing-container">
+                <button id="drawbutton" class="btn" title="Draw"><i class="fas fa-pencil-alt"></i></button>
+            </div>
+            <div class="eraser-container">
+                <button id="eraserButton" class="btn" title="Eraser"><i class="fas fa-eraser"></i></button>
+            </div>
+            <div class="image-container">
+                <label for="imageLoader" class="btn" title="Upload Image"><i class="fas fa-image"></i></label>
+                <input type="file" id="imageLoader" name="imageLoader"/>
+            </div>
+            <div class="color-picker-container">
+                <label for="colorPicker" class="btn" title="Choose Color"><i class="fas fa-palette"></i><input type="color" id="colorPicker" value="#000000"></label>
+            </div>
+        </div>
+        
+        <div class="canvas-container">
+            <canvas id="drawingcanvas" width="500" height="550"></canvas>
+        </div>
+
+        <div class="quote-save-container">
+            <div class="quote-container">
+                <input type="text" id="quoteinput" placeholder="Enter your quote">
+                <button onclick="addQuote()" class="btn" title="Add Quote"><i class="fas fa-plus"></i></button>
+                <button onclick="saveCanvas()" class="btn" title="Save"><i class="fas fa-save"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var canvas = new fabric.Canvas('drawingcanvas', {
+            backgroundColor: '#f0f0f0',
+            isDrawingMode: false
+        });
+
+        var reviewIndex;
+
+        function getQueryParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        window.onload = function() {
+            reviewIndex = getQueryParameter('index');
+            if (reviewIndex !== null) {
+                loadCanvasState(reviewIndex);
+            }
+        };
+
+        var isMovingQuote = false;
+
+        function enableDrawingMode() {
+            if (!isMovingQuote) {
+                canvas.isDrawingMode = true;
+                canvas.freeDrawingBrush.color = colorPicker.value;
+                canvas.freeDrawingBrush.width = 5;
+            }
+        }
+
+        function disableDrawingMode () {
+            canvas.isDrawingMode = false;
+        }
+
+        canvas.on('mouse:down', function(o){
+            if (!isMovingQuote && !canvas.isDrawingMode) return;
+            var pointer = canvas.getPointer(o.e);
+            var objects = canvas.getObjects();
+            objects.forEach(function(object) {
+                if (object.type === 'text' && object === o.target) {
+                    isMovingQuote = true;
+                    disableDrawingMode();
+                }
+            });
+        });
+
+        canvas.on('mouse:up', function(o){
+            if (isMovingQuote) {
+                isMovingQuote = false;
+            }
+        });
+
+        function addQuote() {
+            var quote = document.getElementById('quoteinput').value;
+            var text = new fabric.Text(quote, {
+                left: 100,
+                top: 100,
+                fontSize: 20,
+                fill: colorPicker.value
+            });
+            canvas.add(text);
+            disableDrawingMode();
+        }
+
+        function saveCanvas() {
+            var dataURL = canvas.toDataURL({
+                format: 'png',
+                quality: 0.8
+            });
+            
+            fetch("{{ url_for('save_others_image', genre='others') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ image: dataURL, canvasState: canvas.toJSON() })
+            }).then(Response => Response.json())
+            .then (data => {
+                if (data.success) {
+                    localStorage.setItem('othersBookCoverImagePath', data.image_path);
+                    window.location.href = "{{ url_for('othersreviews') }}";
+                } else {
+                    alert("Error saving canvas: " + data.error);
+                }
+            }).catch(error => {
+                alert("Error saving canvas: " + error.message);
+            });
+        }
+
+        var drawButton = document.getElementById('drawbutton');
+        drawButton.addEventListener('click', function() {
+            if (canvas.isDrawingMode) {
+                disableDrawingMode();
+            } else {
+                enableDrawingMode();
+            }
+            this.innerHTML = '<i class="fas fa-pencil-alt"></i>';
+        });
+
+        var colorPicker = document.getElementById('colorPicker');
+        colorPicker.addEventListener('change', function() {
+            canvas.freeDrawingBrush.color = this.value;
+        });
+
+        function addRectangle() {
+            var rect = new fabric.Rect({
+                left: 100,
+                top: 100,
+                fill: colorPicker.value,
+                width: 60,
+                height: 70,
+                selectable: true
+            });
+            canvas.add(rect);
+        }
+
+        function addCircle() {
+            var circle = new fabric.Circle({
+                left: 150,
+                top: 150,
+                fill: colorPicker.value,
+                radius: 30,
+                selectable: true
+            });
+            canvas.add(circle);
+        }
+
+        var imageLoader = document.getElementById('imageLoader');
+        imageLoader.addEventListener('change', handleImage, false);
+
+        function handleImage(e) {
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                var imgObj = new Image();
+                imgObj.src = event.target.result;
+                imgObj.onload = function() {
+                    var img = new fabric.Image(imgObj);
+                    img.scale(0.5).set({
+                        left: 100,
+                        top: 100,
+                        selectable: true
+                    });
+                    canvas.add(img);
+                }
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        }
+
+        var isErasing = false;
+
+        function enableEraserMode() {
+            canvas.isDrawingMode = false;
+            isErasing = true;
+        }
+
+        function disableEraserMode() {
+            isErasing = false;
+        }
+
+        document.getElementById('eraserButton').addEventListener('click', function() {
+            if (isErasing) {
+                disableEraserMode();
+            } else {
+                enableEraserMode();
+            }
+            this.innerHTML = '<i class="fas fa-eraser"></i>';
+        });
+
+        canvas.on('mouse:down', function(o) {
+            if (isErasing) {
+                var pointer = canvas.getPointer(o.e);
+                var objects = canvas.getObjects();
+                var toRemove = [];
+
+                objects.forEach(function(object) {
+                    if (object.containsPoint(pointer)) {
+                        toRemove.push(object);
+                    }
+                });
+
+                toRemove.forEach(function(object) {
+                    canvas.remove(object);
+                });
+
+                canvas.renderAll();
+            }
+        });
+
+        window.onload = function() {
+            fetch("{{ url_for('load_others_canvas_state') }}") // Updated URL
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        canvas.loadFromJSON(data.canvasState,function() {
+                            canvas.renderAll();
+                        });
+                    } else {
+                        initializeCanvas();
+                    }
+                });
+        };
+
+        function initializeCanvas() {
+            canvas.backgroundColor = '#edf6f9';
+            canvas.isDrawingMode = false;
+
+            canvas.on('mouse:down', function(o) {
+
+            });
+
+            canvas.on('mouse:up', function(o) {
+
+            });
+        }
+    </script>
+</body>
+</html>

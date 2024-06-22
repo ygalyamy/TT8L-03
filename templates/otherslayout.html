@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Others Book Reviews</title>
+    <style>
+        /* Styling for review items */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Styling for review items */
+        .review-item {
+            display: flex;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+            transition: box-shadow 0.3s ease;
+        }
+        .review-item:hover {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        .review-cover {
+            flex: 0 200px; /* Fixed width for cover */
+            margin-right: 20px;
+        }
+        .review-cover img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .no-cover {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+        }
+        .no-cover-text {
+            color: #888;
+            text-align: center;
+        }
+        .review-content {
+            flex: 1;
+        }
+        .review-content h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        .review-details {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+        .edit-button {
+            background-color: #000000A0;
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        .edit-button:hover {
+            background-color: #000000;
+        }
+    </style>
+</head>
+<body>
+    <h1>Others Book Reviews</h1>
+
+    <div id="reviewsContainer"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Retrieve reviews from localStorage or fetch from server
+            var reviews = JSON.parse(localStorage.getItem('othersbookReviews')) || [];
+            var genre = 'others';
+
+            // Display each review
+            var reviewsContainer = document.getElementById('reviewsContainer');
+            reviews.forEach((review, index) => {
+                var reviewItem = document.createElement('div');
+                reviewItem.classList.add('review-item');
+
+                // Fetch the latest image path from localStorage
+                var localStorageKey = genre === 'others' ? 'othersBookCoverImagePath' : 'fictionBookCoverImagePath';
+                var imageExists = localStorage.getItem(localStorageKey) !== null;
+                var image_path = localStorage.getItem(localStorageKey) || 'images/default_cover.png'; // Replace with default image path
+
+                // Create cover image or placeholder
+                var coverContainer = document.createElement('div');
+                coverContainer.classList.add('review-cover');
+                if (imageExists) {
+                    var coverImg = document.createElement('img');
+                    coverImg.src = image_path;
+                    coverImg.alt = 'Book Cover';
+                    coverContainer.appendChild(coverImg);
+                } else {
+                    var noCoverDiv = document.createElement('div');
+                    noCoverDiv.classList.add('no-cover');
+                    var noCoverText = document.createElement('p');
+                    noCoverText.classList.add('no-cover-text');
+                    noCoverText.textContent = 'No cover image available';
+                    noCoverDiv.appendChild(noCoverText);
+                    coverContainer.appendChild(noCoverDiv);
+                }
+
+                // Create review content
+                var reviewContent = document.createElement('div');
+                reviewContent.classList.add('review-content');
+                reviewContent.innerHTML = `
+                    <h2>Review ${index + 1}</h2>
+                    <p><strong>Book Rating:</strong> ${review.book_rating}</p>
+                    <p><strong>Read Again Rating:</strong> ${review.read_again}</p>
+                    <p><strong>Impact Rating:</strong> ${review.impact_rating}</p>
+                    <p><strong>Overall Thoughts:</strong> ${review.overall_thoughts}</p>
+                    <p class="review-details"><strong>Review Date:</strong> ${review.review_date}</p>
+                    <a href="{{ url_for('others_edit_book_cover') }}" class="edit-button">Edit</a>
+                `;
+
+                // Append cover and content to review item
+                reviewItem.appendChild(coverContainer);
+                reviewItem.appendChild(reviewContent);
+
+                // Append review item to reviews container
+                reviewsContainer.appendChild(reviewItem);
+            });
+        });
+    </script>
+</body>
+</html>
