@@ -1,27 +1,61 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for, jsonify, flash
 import os
 import base64
 from datetime import datetime
 import json
 
 app = Flask(__name__)
+app.secret_key = 'your_secret_key'
 
-FICTION_IMAGE_PATH = 'bookcover.png'
-COMEDY_IMAGE_PATH = 'bookcover2.png'
-OTHERS_IMAGE_PATH = 'bookcover3.png'
-ROMANCE_IMAGE_PATH = 'bookcover4.png'
-THRILLER_IMAGE_PATH = 'bookcover5.png'
-HORROR_IMAGE_PATH = 'bookcover6.png'
-MANGA_IMAGE_PATH = 'bookcover7.png'
-NONFICTION_IMAGE_PATH = 'bookcover8.png'
-CANVAS_STATE_PATH = 'canvas_state.json'
-COMEDY_CANVAS_STATE_PATH = 'comedy_canvas_state.json'
-OTHERS_CANVAS_STATE_PATH = 'others_canvas_state.json'
-ROMANCE_CANVAS_STATE_PATH = 'romance_canvas_state.json'
-THRILLER_CANVAS_STATE_PATH = 'thriller_canvas_state.json'
-HORROR_CANVAS_STATE_PATH = 'horror_canvas_state.json'
-MANGA_CANVAS_STATE_PATH = 'manga_canvas_state.json'
-NONFICTION_CANVAS_STATE_PATH = 'nonfiction_canvas_state.json'
+FICTION_IMAGE_PATH = 'static/images/bookcover.png'
+COMEDY_IMAGE_PATH = 'static/images/bookcover2.png'
+OTHERS_IMAGE_PATH = 'static/images/bookcover3.png'
+ROMANCE_IMAGE_PATH = 'static/images/bookcover4.png'
+THRILLER_IMAGE_PATH = 'static/images/bookcover5.png'
+HORROR_IMAGE_PATH = 'static/images/bookcover6.png'
+MANGA_IMAGE_PATH = 'static/images/bookcover7.png'
+NONFICTION_IMAGE_PATH = 'static/images/bookcover8.png'
+CANVAS_STATE_PATH = 'static/images/canvas_state.json'
+COMEDY_CANVAS_STATE_PATH = 'static/images/comedy_canvas_state.json'
+OTHERS_CANVAS_STATE_PATH = 'static/images/others_canvas_state.json'
+ROMANCE_CANVAS_STATE_PATH = 'static/images/romance_canvas_state.json'
+THRILLER_CANVAS_STATE_PATH = 'static/images/thriller_canvas_state.json'
+HORROR_CANVAS_STATE_PATH = 'static/images/horror_canvas_state.json'
+MANGA_CANVAS_STATE_PATH = 'static/images/manga_canvas_state.json'
+NONFICTION_CANVAS_STATE_PATH = 'static/images/nonfiction_canvas_state.json'
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        # Replace with actual user authentication logic
+        if email == 'user@example.com' and password == 'password':
+            return redirect(url_for('webpage'))
+        else:
+            flash('Invalid credentials')
+            return redirect(url_for('index'))
+    return render_template('webpage.html')
+
+@app.route('/webpage')
+def webpage():
+    return render_template('webpage.html')
+
+@app.route('/library')
+def library():
+    return render_template('library.html')
+
+@app.route('/book_of_the_month')
+def book_of_the_month():
+    return render_template('book_of_the_month.html')
+
+@app.route('/settings')
+def settings():
+    return render_template('settings.html')
 
 @app.route('/edit-book-cover', methods=['GET'])
 def edit_book_cover():

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/papertrail.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Home</title>
+    <style>
+        .dark-theme {
+            background-color: #1f1f1f;
+            color: #ffffff;
+        }
+        body {
+            background-image: url("{{ url_for('static', filename='images/Webpage.jpg') }}");
+            background-size: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+            <header>
+            </header>
+
+            <nav>
+                <a href="{{ url_for('webpage') }}">HOME</a>
+                <a href="{{ url_for('library') }}">LIBRARY</a>
+                <a href="{{ url_for('book_of_the_month') }}">BOOK OF THE MONTH</a>
+                <a href="{{ url_for('settings') }}">SETTINGS</a>
+            </nav>
+
+            <main>
+                <h1>PaperTrail</h1>
+                <p>Rate your books here to be able to keep track of your readings all year round!!</p>
+            </main>
+            
+            <footer>
+                <p>PaperTrail, TT8L-03, Co. - Copyright 2024</p>
+            </footer>
+    </div>
+    <script>
+        window.onload = function() {
+            const theme = localStorage.getItem("theme");
+            if (theme === "dark") {
+                setDarkTheme();
+            } else {
+                setLightTheme();
+            }
+        };
+
+        function redirectToForm(url) {
+            window.location.href = url;
+        }
+    </script>
+</body>
+</html>
