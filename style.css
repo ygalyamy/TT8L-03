@@ -4,8 +4,7 @@ html {
 
 body {
     background-color: rgba(158, 127, 68, 0.393);
-    img: src="../assets/img/webpage.jpg">
-    background-image: url(../assets/img/Webpage.jpg);
+    background-image: url(Webpage.jpg);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -47,7 +46,7 @@ footer {
 }
 
 h1 {
-    font-size: 90px;
+    font-size: 100px;
     color: aliceblue;
     font-family: 'Times New Roman', Times, serif;
 }
@@ -57,7 +56,6 @@ h3 {
     font-family: 'Times New Roman', Times, serif;
 }
 p {
-    background-image: url(Webpage.jpg);
     font-size: 18px;
     color: aliceblue;
     font-family: 'Times New Roman', Times, serif;
@@ -66,7 +64,6 @@ p {
 a {
     color: white;
     font-family: 'Times New Roman', Times Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif, serif
-    /* text-decoration: none; */
 }
 
 nav a {
@@ -88,7 +85,7 @@ section p {
 }
 
 footer p {
-    font-size: 10px;
+    font-size: 15px;
     text-align: center;
     color: rgb(44, 43, 43);
 }
@@ -111,10 +108,5 @@ p {
     position: relative;
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
-    font-size: 20px;
-    padding-bottom: 40px;
-}
-
-video {
-    position: relative;
+    font-size: 16px;
 }
