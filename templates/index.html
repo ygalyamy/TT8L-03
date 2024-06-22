@@ -10,14 +10,14 @@
     <!--=============== CSS ===============-->
     <link rel="stylesheet" href="../assets/css/style2.css">
 
-    <title>Beautiful glass login form - Bedimcode</title>
+    <title>Login Form</title>
 </head>
 <body>
     <div class="container">
         <div class="login__content">
             <img src="../assets/img/webpage.jpg" alt="login image" class="login__img">
 
-            <form action="/login" method="POST" class="login__form">
+            <form action="/TT8L-03/templates/login" method="POST" class="login__form">
                 <div>
                     <h1 class="login__title">
                         <span>Welcome</span> Back
@@ -52,7 +52,7 @@
                <div>
                    <div class="login__buttons">
                        <button class="login__button" type="submit">Log In</button>
-                       <a href="/signup" class="login__button login__button-ghost">Sign Up</a>
+                       <a href="/TT8L-03/templates/signup.html#" class="login__button">Sign Up</a>
                    </div>
 
                    <a href="#" class="login__forgot">Forgot Password?</a>
@@ -66,64 +66,3 @@
    </body>
    </html>
    
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!--=============== REMIXICONS ===============-->
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
-
-    <!--=============== CSS ===============-->
-    <link rel="stylesheet" href="../assets/css/style2.css">
-
-    <title>Sign Up - PaperTrail</title>
-</head>
-<body>
-    <div class="container">
-        <div class="login__content">
-            <img src="../assets/img/webpage.jpg" alt="signup image" class="login__img">
-
-            <form action="/signup" method="POST" class="login__form">
-                <div>
-                    <h1 class="login__title">
-                        <span>Create</span> Account
-                    </h1>
-                    <p class="login__description">
-                        Sign up to start tracking your books.
-                    </p>
-                </div>
-                
-                <div>
-                    <div class="login__inputs">
-                        <div>
-                            <label for="signup-email" class="login__label">Email</label>
-                            <input type="email" name="email" placeholder="Enter your email address" required class="login__input" id="signup-email">
-                        </div>
-
-                        <div>
-                            <label for="signup-pass" class="login__label">Password</label>
-
-                            <div class="login__box">
-                                <input type="password" name="password" placeholder="Enter your password" required class="login__input" id="signup-pass">
-                                <i class="ri-eye-off-line login__eye" id="signup-icon"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="login__buttons">
-                        <button class="login__button" type="submit">Sign Up</button>
-                        <a href="/" class="login__button login__button-ghost">Back to Login</a>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!--=============== MAIN JS ===============-->
-    <script src="../assets/js/main.js"></script>
-</body>
-</html>

@@ -4,7 +4,8 @@ html {
 
 body {
     background-color: rgba(158, 127, 68, 0.393);
-    background-image: url(Webpage.jpg);
+    img: src="../assets/img/webpage.jpg">
+    background-image: url(../assets/img/Webpage.jpg);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -56,6 +57,7 @@ h3 {
     font-family: 'Times New Roman', Times, serif;
 }
 p {
+    background-image: url(Webpage.jpg);
     font-size: 18px;
     color: aliceblue;
     font-family: 'Times New Roman', Times, serif;
