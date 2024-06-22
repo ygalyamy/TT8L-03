@@ -186,22 +186,29 @@
                 format: 'png',
                 quality: 0.8
             });
-            
+
             fetch("{{ url_for('save_thriller_image', genre='thriller') }}", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ image: dataURL, canvasState: canvas.toJSON() })
-            }).then(Response => Response.json())
-            .then (data => {
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
                 if (data.success) {
                     localStorage.setItem('thrillerBookCoverImagePath', data.image_path);
                     window.location.href = "{{ url_for('thrillerreviews') }}";
                 } else {
                     alert("Error saving canvas: " + data.error);
                 }
-            }).catch(error => {
+            })
+            .catch(error => {
                 alert("Error saving canvas: " + error.message);
             });
         }

@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="/Users/jasontanjiasheng/TT8L-03/images/papertrail.png">
-    <title>Book Review Form - Thriller</title>
+    <link rel="icon" type="image/png" href="papertrail.png">
+    <title>Book Review Form - Others</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-image: url('/Users/jasontanjiasheng/TT8L-03/images/thriller.jpeg');
+            background-image: url('others.JPG');
             margin: 0;
             padding: 0;
             display: flex;
@@ -138,6 +138,7 @@
         <div class="form-group">
             <input type="submit" value="Submit">
         </div>
+        <a href="otherslayout.html" style="position: fixed; bottom: 20px; right: 20px; background-color: #4CAF50; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none;">View Reviews</a>
     </form>
 </div>
 
@@ -156,13 +157,13 @@
         };
 
         // Retrieve existing reviews from local storage or initialize new array
-        var existingReviews = JSON.parse(localStorage.getItem('thrillerbookReviews')) || [];
+        var existingReviews = JSON.parse(localStorage.getItem('othersbookReviews')) || [];
 
         // Append new review to existing reviews
         existingReviews.push(formData);
 
         // Store updated reviews in local storage
-        localStorage.setItem('thrillerbookReviews', JSON.stringify(existingReviews));
+        localStorage.setItem('othersbookReviews', JSON.stringify(existingReviews));
 
         // Create a text file for the review
         var textFileContent = "Book Rating: " + formData.book_rating + "\n";
@@ -176,7 +177,7 @@
 
         var a = document.createElement('a');
         a.href = url;
-        a.download = 'book_review_thriller.txt';
+        a.download = 'book_review_others.txt';
         a.click();
         URL.revokeObjectURL(url);
 

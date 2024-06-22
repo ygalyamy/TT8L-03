@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="/Users/jasontanjiasheng/TT8L-03/images/papertrail.png">
-    <title>Book Review Form - Fiction</title>
+    <link rel="icon" type="image/png" href="papertrail.png">
+    <title>Book Review Form - Thriller</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-image: url('/Users/jasontanjiasheng/TT8L-03/images/fiction.JPG');
+            background-image: url('thriller.jpeg');
             margin: 0;
             padding: 0;
             display: flex;
@@ -138,9 +138,9 @@
         <div class="form-group">
             <input type="submit" value="Submit">
         </div>
+        <a href="thrillerlayout.html" style="position: fixed; bottom: 20px; right: 20px; background-color: #4CAF50; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none;">View Reviews</a>
     </form>
 </div>
-
 <script>
     // Function to handle form submission
     function submitForm(event) {
@@ -156,13 +156,13 @@
         };
 
         // Retrieve existing reviews from local storage or initialize new array
-        var existingReviews = JSON.parse(localStorage.getItem('fictionbookReviews')) || [];
+        var existingReviews = JSON.parse(localStorage.getItem('thrillerbookReviews')) || [];
 
         // Append new review to existing reviews
         existingReviews.push(formData);
 
         // Store updated reviews in local storage
-        localStorage.setItem('fictionbookReviews', JSON.stringify(existingReviews));
+        localStorage.setItem('thrillerbookReviews', JSON.stringify(existingReviews));
 
         // Create a text file for the review
         var textFileContent = "Book Rating: " + formData.book_rating + "\n";
@@ -176,35 +176,34 @@
 
         var a = document.createElement('a');
         a.href = url;
-        a.download = 'book_review_fiction.txt';
+        a.download = 'book_review_thriller.txt';
         a.click();
         URL.revokeObjectURL(url);
-
         // Reset the form
         document.getElementById('bookReviewForm').reset();
 
         // Display success message or perform any other action as needed
         alert('Thank you for your review!');
-    }
+        }
 
-    // Add form submission event listener
-    document.getElementById('bookReviewForm').addEventListener('submit', submitForm);
+        // Add form submission event listener
+        document.getElementById('bookReviewForm').addEventListener('submit', submitForm);
 
-    // Function to get current date
-    function getCurrentDate() {
-        var now = new Date();
-        var date = now.getDate();
-        var month = now.getMonth() + 1;
-        var year = now.getFullYear();
-        return `${year}-${month}-${date}`;
-    }
+        // Function to get current date
+        function getCurrentDate() {
+            var now = new Date();
+            var date = now.getDate();
+            var month = now.getMonth() + 1;
+            var year = now.getFullYear();
+            return `${year}-${month}-${date}`;
+        }
 
-    // Set current date when the form loads
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('review_date').value = getCurrentDate();
-    });
+        // Set current date when the form loads
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('review_date').value = getCurrentDate();
+        });
 
-    window.onload = function() {
+        window.onload = function() {
         const theme = localStorage.getItem("theme");
         if (theme === "dark") {
             document.body.classList.add("dark-theme");

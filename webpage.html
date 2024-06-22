@@ -4,8 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href=papertrail.png">
     <link rel="stylesheet" href="style.css">
     <title>Home</title>
+    <style>
+        .dark-theme {
+            background-color: #1f1f1f;
+            color: #ffffff;
+    </style>
 </head>
 
 <body>
@@ -16,7 +22,7 @@
             <nav>
                 <a href="webpage.html">HOME</a></li>
                 <a href="library.html">LIBRARY</a>
-                <a href="toppicks.html">BOOK OF THE MONTH</a>
+                <a href="book_of_the_month.html">BOOK OF THE MONTH</a>
                 <a href="settings.html">SETTINGS</a>
             </nav>
 
@@ -29,5 +35,19 @@
                 <p>PaperTrail, TT8L-03, Co. - Copyright 2024</p>
             </footer>
     </div>
+    <script>
+        window.onload = function() {
+            const theme = localStorage.getItem("theme");
+            if (theme === "dark") {
+                setDarkTheme();
+            } else {
+                setLightTheme();
+            }
+        };
+
+        function redirectToForm(url) {
+            window.location.href = url;
+        }
+    </script>
 </body>
 </html>

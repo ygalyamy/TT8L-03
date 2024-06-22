@@ -6,25 +6,22 @@ import json
 
 app = Flask(__name__)
 
-if not os.path.exists('static/images'):
-    os.makedirs('static/images')
-
-FICTION_IMAGE_PATH = 'static/images/bookcover.png'
-COMEDY_IMAGE_PATH = 'static/images/bookcover2.png'
-OTHERS_IMAGE_PATH = 'static/images/bookcover3.png'
-ROMANCE_IMAGE_PATH = 'static/images/bookcover4.png'
-THRILLER_IMAGE_PATH = 'static/images/bookcover5.png'
-HORROR_IMAGE_PATH = 'static/images/bookcover6.png'
-MANGA_IMAGE_PATH = 'static/images/bookcover7.png'
-NONFICTION_IMAGE_PATH = 'static/images/bookcover8.png'
-CANVAS_STATE_PATH = 'static/images/canvas_state.json'
-COMEDY_CANVAS_STATE_PATH = 'static/images/comedy_canvas_state.json'
-OTHERS_CANVAS_STATE_PATH = 'static/images/others_canvas_state.json'
-ROMANCE_CANVAS_STATE_PATH = 'static/images/romance_canvas_state.json'
-THRILLER_CANVAS_STATE_PATH = 'static/images/thriller_canvas_state.json'
-HORROR_CANVAS_STATE_PATH = 'static/images/horror_canvas_state.json'
-MANGA_CANVAS_STATE_PATH = 'static/images/manga_canvas_state.json'
-NONFICTION_CANVAS_STATE_PATH = 'static/images/nonfiction_canvas_state.json'
+FICTION_IMAGE_PATH = 'bookcover.png'
+COMEDY_IMAGE_PATH = 'bookcover2.png'
+OTHERS_IMAGE_PATH = 'bookcover3.png'
+ROMANCE_IMAGE_PATH = 'bookcover4.png'
+THRILLER_IMAGE_PATH = 'bookcover5.png'
+HORROR_IMAGE_PATH = 'bookcover6.png'
+MANGA_IMAGE_PATH = 'bookcover7.png'
+NONFICTION_IMAGE_PATH = 'bookcover8.png'
+CANVAS_STATE_PATH = 'canvas_state.json'
+COMEDY_CANVAS_STATE_PATH = 'comedy_canvas_state.json'
+OTHERS_CANVAS_STATE_PATH = 'others_canvas_state.json'
+ROMANCE_CANVAS_STATE_PATH = 'romance_canvas_state.json'
+THRILLER_CANVAS_STATE_PATH = 'thriller_canvas_state.json'
+HORROR_CANVAS_STATE_PATH = 'horror_canvas_state.json'
+MANGA_CANVAS_STATE_PATH = 'manga_canvas_state.json'
+NONFICTION_CANVAS_STATE_PATH = 'nonfiction_canvas_state.json'
 
 @app.route('/edit-book-cover', methods=['GET'])
 def edit_book_cover():
@@ -155,9 +152,17 @@ def save_thriller_image():
         with open(THRILLER_CANVAS_STATE_PATH, 'w') as f:
             json.dump(data['canvasState'], f)
 
-        return jsonify(success=True, image_path=THRILLER_IMAGE_PATH)
+        response_data = {
+            'success': True,
+            'image_path': THRILLER_IMAGE_PATH
+        }
+        return jsonify(response_data)
     except Exception as e:
-        return jsonify(success=False, error=str(e))
+        response_data = {
+            'success': False,
+            'error': str(e)
+        }
+        return jsonify(response_data)
 
 @app.route('/load_thriller_canvas_state', methods=['GET'])
 def load_thriller_canvas_state():
@@ -429,4 +434,4 @@ def nonfictionreviews():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5500)
