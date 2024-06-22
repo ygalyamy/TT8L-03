@@ -187,7 +187,7 @@
                 quality: 0.8
             });
             
-            fetch("{{ url_for('save_image', genre='horror') }}", {
+            fetch("{{ url_for('save_horror_image', genre='horror') }}", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -198,7 +198,11 @@
                 if (data.success) {
                     localStorage.setItem('horrorBookCoverImagePath', data.image_path);
                     window.location.href = "{{ url_for('horrorreviews') }}";
-                } 
+                } else {
+                    alert("Error saving canvas: " + data.error);
+                }
+            }).catch(error => {
+                alert("Error saving canvas: " + error.message);
             });
         }
 

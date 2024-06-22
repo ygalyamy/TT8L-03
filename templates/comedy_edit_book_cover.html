@@ -187,7 +187,7 @@
                 quality: 0.8
             });
             
-            fetch("{{ url_for('save_image', genre='comedy') }}", {
+            fetch("{{ url_for('save_comedy_image', genre='comedy') }}", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -198,7 +198,11 @@
                 if (data.success) {
                     localStorage.setItem('comedyBookCoverImagePath', data.image_path); // Updated key
                     window.location.href = "{{ url_for('comedyreviews') }}"; // Updated URL
-                } 
+                } else {
+                    alert("Error saving canvas: " + data.error);
+                }
+            }).catch(error => {
+                alert("Error saving canvas: " + error.message);
             });
         }
 

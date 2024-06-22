@@ -187,7 +187,7 @@
                 quality: 0.8
             });
             
-            fetch("{{ url_for('save_image', genre='others') }}", {
+            fetch("{{ url_for('save_others_image', genre='others') }}", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -198,7 +198,11 @@
                 if (data.success) {
                     localStorage.setItem('othersBookCoverImagePath', data.image_path);
                     window.location.href = "{{ url_for('othersreviews') }}";
-                } 
+                } else {
+                    alert("Error saving canvas: " + data.error);
+                }
+            }).catch(error => {
+                alert("Error saving canvas: " + error.message);
             });
         }
 
