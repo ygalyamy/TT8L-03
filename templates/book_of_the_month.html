@@ -3,84 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD:library/book_of_the_month.html
-    <link rel="icon" type="image/png" href="/Users/jasontanjiasheng/TT8L-03/images/papertrail.png">
-    <title>PaperTrail - Library</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 200px 20px 20px 20px;
-            background-color: #ffffff;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 150px;
-        }
-
-        body.dark-theme {
-            background-color: #1f1f1f;
-            color: #ffffff;
-        }
-
-        .box {
-            width: 170px;
-            height: 245px;
-            border: 1px solid #ffffff;
-            border-radius: 5px;
-            overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            cursor: pointer;
-            background-size: cover;
-            background-repeat: no-repeat;
-        }
-
-        .dark-theme .box {
-            border-color: #555;
-            box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
-        }
-
-        .thriller-box {
-            background-image: url('/Users/jasontanjiasheng/TT8L-03/images/thriller.jpeg');
-        }
-
-        .fiction-box {
-            background-image: url('/Users/jasontanjiasheng/TT8L-03/images/fiction.JPG');
-        }
-
-        .non-fiction-box {
-            background-image: url('/Users/jasontanjiasheng/TT8L-03/images/non-fiction.JPG');
-        }
-
-        .romance-box {
-            background-image: url('/Users/jasontanjiasheng/TT8L-03/images/romance.jpeg');
-        }
-
-        .horror-box {
-            background-image: url('/Users/jasontanjiasheng/TT8L-03/images/horror.jpeg');
-        }
-
-        .comedy-box {
-            background-image: url('/Users/jasontanjiasheng/TT8L-03/images/comedy.JPG');
-        }
-
-        .comics-manga-box {
-            background-image: url('/Users/jasontanjiasheng/TT8L-03/images/comics-manga.JPG');
-        }
-
-        .others-box {
-            background-image: url('/Users/jasontanjiasheng/TT8L-03/images/others.JPG');
-        }
-
-        .box-text {
-            margin-top: 15px;
-            color: white;
-            text-shadow: 1px 1px 2px black;
-=======
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/papertrail.png') }}">
     <title>Top Books of the Month</title>
     <style>
@@ -184,63 +106,10 @@
             justify-content: space-between;
             align-items: center;
             min-width: 300px;
->>>>>>> origin/alya:templates/book_of_the_month.html
         }
     </style>
 </head>
 <body>
-<<<<<<< HEAD:library/book_of_the_month.html
-    <div class="box thriller-box" onclick="redirectToForm('thriller.html')">
-        <div class="box-content"></div>
-        <div class="box-text">Thriller</div>
-    </div>
-    <div class="box fiction-box" onclick="redirectToForm('fiction.html')">
-        <div class="box-content"></div>
-        <div class="box-text">Fiction</div>
-    </div>
-    <div class="box non-fiction-box" onclick="redirectToForm('non-fiction.html')">
-        <div class="box-content"></div>
-        <div class="box-text">Non-Fiction</div>
-    </div>
-    <div class="box romance-box" onclick="redirectToForm('romance.html')">
-        <div class="box-content"></div>
-        <div class="box-text">Romance</div>
-    </div>
-    <div class="box horror-box" onclick="redirectToForm('horror.html')">
-        <div class="box-content"></div>
-        <div class="box-text">Horror</div>
-    </div>
-    <div class="box comedy-box" onclick="redirectToForm('comedy.html')">
-        <div class="box-content"></div>
-        <div class="box-text">Comedy</div>
-    </div>
-    <div class="box comics-manga-box" onclick="redirectToForm('comics-manga.html')">
-        <div class="box-content"></div>
-        <div class="box-text">Comics/Manga</div>
-    </div>
-    <div class="box others-box" onclick="redirectToForm('others.html')">
-        <div class="box-content"></div>
-        <div class="box-text">Others</div>
-    </div>
-
-    <script>
-        function redirectToForm(page) {
-            window.location.href = page;
-        }
-
-        window.onload = function() {
-            const theme = localStorage.getItem("theme");
-            if (theme === "dark") {
-                document.body.classList.add("dark-theme");
-            } else {
-                document.body.classList.remove("dark-theme");
-            }
-        };
-    </script>
-</body>
-</html>
-
-=======
     <nav>
         <a href="{{ url_for('webpage') }}">HOME</a>
         <a href="{{ url_for('library') }}">LIBRARY</a>
@@ -414,4 +283,3 @@
     </script>
 </body>
 </html>
->>>>>>> origin/alya:templates/book_of_the_month.html
