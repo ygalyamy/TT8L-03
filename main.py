@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-hello word
-beep
-from alya
-=======
 from flask import Flask, render_template, request, redirect, url_for, jsonify, flash
 import os
 import base64
