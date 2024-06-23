@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="papertrail.png">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <title>Notification Toggle</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        .toggle {
+            width: 100%;
+            height: 100vh;
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .button {
+            background-color: #ccc;
+            width: 100px;
+            height: 50px;
+            border-radius: 50px;
+            cursor: pointer;
+            position: relative;
+            transition: 0.2s;
+        }
+        .button::before {
+            position: absolute;
+            content: '';
+            background-color: #fff;
+            width: 40px;
+            height: 40px;
+            border-radius: 50px;
+            margin: 5px;
+            transition: 0.2s;
+        }
+        input:checked + .button {
+            background-color: aqua;
+        }
+        input:checked + .button::before {
+            transform: translateX(50px);
+        }
+        .throw {
+            display: none;
+        }
+        .toggle-label {
+            margin-right: 15px;
+            font-size: 18px;
+            font-family: arial, sans-serif;
+        }
+        .notification-container {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            z-index: 1000;
+            display: none;
+        }
+        .notification {
+            background-color: rgba(0, 0, 0, 8);
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="toggle">
+        <label for="check" class="toggle-label">Show Notification</label>
+        <input type="checkbox" class="throw" id="check">
+        <label for="check" class="button"></label>
+    </div>
+
+    <div class="notification-container" id="notificationContainer">
+        <div class="notification" id="notification">
+            Don't forget to rate your book!
+            <button onclick="closeNotification()">Close</button>
+        </div>
+    </div>
+
+    <script>
+
+        var notificationsEnabled = false;
+        var notificationInterval;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var toggleButton = document.getElementById("check");
+
+            if (localStorage.getItem("notificationsEnabled") === "true") {
+                toggleButton.checked = true;
+                notificationsEnabled = true;
+                startNotificationInterval();
+            }
+
+            toggleButton.addEventListener('change', function() {
+                if (this.checked) {
+                    notificationsEnabled = true;
+                    localStorage.setItem("notificationsEnabled", "true");
+                    startNotificationInterval();
+                } else {
+                    notificationsEnabled = false;
+                    localStorage.setItem("notificationsEnabled", "false");
+                    clearInterval(notificationInterval);
+                }
+            });
+        });
+
+        function checkAndShowNotification() {
+            var lastNotificationTime = localStorage.getItem('lastNotificationTime');
+            var currentTime = new Date().getTime();
+            var oneDay = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+            if (!lastNotificationTime || currentTime - lastNotificationTime >= oneDay) {
+                showNotification();
+                localStorage.setItem('lastNotificationTime', currentTime);
+            }
+
+            // Set the interval to check every hour
+            notificationInterval = setInterval(function() {
+                var currentTime = new Date().getTime();
+                var lastNotificationTime = localStorage.getItem('lastNotificationTime');
+
+                if (!lastNotificationTime || currentTime - lastNotificationTime >= oneDay) {
+                    showNotification();
+                    localStorage.setItem('lastNotificationTime', currentTime);
+                }
+            }, 60 * 60 * 1000); // Check every hour
+        }
+
+        function showNotification() {
+            if (!notificationsEnabled) return;
+
+            var notificationContainer = document.getElementById("notificationContainer");
+            var notification = document.getElementById("notification");
+
+            notificationContainer.style.display = "block";
+
+            setTimeout(function () {
+                notificationContainer.style.display = "none";
+            }, 3000);
+        }
+
+        function closeNotification() {
+            var notificationContainer = document.getElementById("notificationContainer");
+            notificationContainer.style.display = "none";
+        }
+
+    </script>
+</body>
+</html>

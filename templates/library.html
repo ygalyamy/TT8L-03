@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/papertrail.png') }}">
+    <title>Library</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        body.dark-theme {
+            background-color: #1f1f1f;
+            color: #ffffff;
+        }
+
+        .container {
+            width: 100%;
+            padding-top: 100px; /* Adjust this to create space for the nav bar */
+        }
+
+        nav {
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.334);
+            text-align: center;
+            padding-top: 14px;
+            padding-bottom: 14px;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        nav a {
+            text-decoration: none;
+            font-size: 25px;
+            padding-left: 10px;
+            padding-right: 10px;
+            color: white;
+            font-family: 'Times New Roman', Times, Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        }
+
+        nav a:hover {
+            color: rgb(181, 147, 228);
+        }
+
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 150px;
+            justify-content: center;
+        }
+
+        .box {
+            width: 170px;
+            height: 245px;
+            border: 1px solid #ffffff;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        .dark-theme .box {
+            border-color: #555;
+            box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+        }
+
+        .thriller-box {
+            background-image: url("{{ url_for('static', filename='images/thriller.jpeg') }}");
+        }
+
+        .fiction-box {
+            background-image: url("{{ url_for('static', filename='images/fiction.jpg') }}");
+        }
+
+        .non-fiction-box {
+            background-image: url("{{ url_for('static', filename='images/non-fiction.jpg') }}");
+        }
+
+        .romance-box {
+            background-image: url("{{ url_for('static', filename='images/romance.jpeg') }}");
+        }
+
+        .horror-box {
+            background-image: url("{{ url_for('static', filename='images/horror.jpeg') }}");
+        }
+
+        .comedy-box {
+            background-image: url("{{ url_for('static', filename='images/comedy.jpg') }}");
+        }
+
+        .comics-manga-box {
+            background-image: url("{{ url_for('static', filename='images/comics-manga.jpg') }}");
+        }
+
+        .others-box {
+            background-image: url("{{ url_for('static', filename='images/others.jpg') }}");
+        }
+
+        .box-text {
+            margin-top: 15px;
+            color: white;
+            text-shadow: 1px 1px 2px black;
+        }
+
+        .toggle {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .toggle-label {
+            margin-right: 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 20px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        .notification-container {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            z-index: 1000;
+            display: none;
+        }
+
+        .notification {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="{{ url_for('webpage') }}">HOME</a>
+        <a href="{{ url_for('library') }}">LIBRARY</a>
+        <a href="{{ url_for('book_of_the_month') }}">BOOK OF THE MONTH</a>
+        <a href="{{ url_for('settings') }}">SETTINGS</a>
+    </nav>
+    <div class="container">
+        <div class="content">
+            <div class="box thriller-box" onclick="redirectToForm('thriller')">
+                <div class="box-content"></div>
+                <div class="box-text">Thriller</div>
+            </div>
+            <div class="box fiction-box" onclick="redirectToForm('fiction')">
+                <div class="box-content"></div>
+                <div class="box-text">Fiction</div>
+            </div>
+            <div class="box non-fiction-box" onclick="redirectToForm('nonfiction')">
+                <div class="box-content"></div>
+                <div class="box-text">Non-Fiction</div>
+            </div>
+            <div class="box romance-box" onclick="redirectToForm('romance')">
+                <div class="box-content"></div>
+                <div class="box-text">Romance</div>
+            </div>
+            <div class="box horror-box" onclick="redirectToForm('horror')">
+                <div class="box-content"></div>
+                <div class="box-text">Horror</div>
+            </div>
+            <div class="box comedy-box" onclick="redirectToForm('comedy')">
+                <div class="box-content"></div>
+                <div class="box-text">Comedy</div>
+            </div>
+            <div class="box comics-manga-box" onclick="redirectToForm('manga')">
+                <div class="box-content"></div>
+                <div class="box-text">Comics/Manga</div>
+            </div>
+            <div class="box others-box" onclick="redirectToForm('others')">
+                <div class="box-content"></div>
+                <div class="box-text">Others</div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="toggle"  style="display:none;">
+            <label class="toggle-label">Show Notification</label>
+            <label class="switch">
+                <input type="checkbox" id="notification-switch" onchange="toggleNotifications()">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+    <div class="notification-container" id="notificationContainer">
+        <div class="notification" id="notification">
+            Don't forget to rate your book!
+            <button onclick="closeNotification()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Theme functions
+        function setLightTheme() {
+            document.body.classList.remove("dark-theme");
+            localStorage.setItem("theme", "light");
+        }
+
+        function setDarkTheme() {
+            document.body.classList.add("dark-theme");
+            localStorage.setItem("theme", "dark");
+        }
+
+        function toggleLightTheme() {
+            if (document.getElementById("light-switch").checked) {
+                setLightTheme();
+            } else {
+                setDarkTheme();
+            }
+        }
+
+        function toggleDarkTheme() {
+            if (document.getElementById("dark-switch").checked) {
+                setDarkTheme();
+            } else {
+                setLightTheme();
+            }
+        }
+
+        // Notification functions
+        var notificationInterval;
+
+        function toggleNotifications() {
+            var isChecked = document.getElementById("notification-switch").checked;
+            if (isChecked) {
+                localStorage.setItem("notificationsEnabled", "true");
+                startNotificationInterval();
+            } else {
+                localStorage.setItem("notificationsEnabled", "false");
+                clearInterval(notificationInterval);
+            }
+        }
+
+        function startNotificationInterval() {
+            checkAndShowNotification();
+            notificationInterval = setInterval(function() {
+                checkAndShowNotification();
+            }, 60 * 60 * 1000); // Check every 24 hours
+        }
+
+        function checkAndShowNotification() {
+            var lastNotificationTime = localStorage.getItem('lastNotificationTime');
+            var currentTime = new Date().getTime();
+            var oneDay = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+            if (!lastNotificationTime || (currentTime - lastNotificationTime >= oneDay)) {
+                showNotification();
+                localStorage.setItem('lastNotificationTime', currentTime);
+            }
+        }
+
+        function showNotification() {
+            var notificationContainer = document.getElementById("notificationContainer");
+            notificationContainer.style.display = "block";
+        }
+
+        function closeNotification() {
+            var notificationContainer = document.getElementById("notificationContainer");
+            notificationContainer.style.display = "none";
+        }
+
+        // Initialization
+        window.onload = function() {
+            const theme = localStorage.getItem("theme");
+            if (theme === "dark") {
+                setDarkTheme();
+            } else {
+                setLightTheme();
+            }
+
+            const notificationsEnabled = localStorage.getItem("notificationsEnabled");
+            if (notificationsEnabled === "true") {
+                document.getElementById("notification-switch").checked = true;
+                startNotificationInterval();
+            } else {
+                document.getElementById("notification-switch").checked = false;
+            }
+        };
+
+        // Function to redirect to different pages
+        function redirectToForm(page) {
+            window.location.href = page;
+        }
+    </script>
+</body>
+</html>
