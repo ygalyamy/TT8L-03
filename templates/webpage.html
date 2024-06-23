@@ -16,6 +16,24 @@
             background-image: url("{{ url_for('static', filename='images/Webpage.jpg') }}");
             background-size: cover;
         }
+        .notification-container {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            z-index: 1000;
+            display: none;
+        }
+
+        .notification {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-width: 300px;
+        }
     </style>
 </head>
 
@@ -40,6 +58,21 @@
                 <p>PaperTrail, TT8L-03, Co. - Copyright 2024</p>
             </footer>
     </div>
+    <div class="container">
+        <div class="toggle" style="display:none;">
+            <label class="toggle-label">Show Notification</label>
+            <label class="switch">
+                <input type="checkbox" id="notification-switch" onchange="toggleNotifications()">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+    <div class="notification-container" id="notificationContainer">
+        <div class="notification" id="notification">
+            Don't forget to rate your book!
+            <button onclick="closeNotification()">Close</button>
+        </div>
+    </div>
     <script>
         window.onload = function() {
             const theme = localStorage.getItem("theme");
@@ -54,5 +87,6 @@
             window.location.href = url;
         }
     </script>
+    <script src="{{ url_for('static', filename='js/notification.js') }}"></script>
 </body>
 </html>

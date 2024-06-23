@@ -28,19 +28,6 @@ NONFICTION_CANVAS_STATE_PATH = 'static/images/nonfiction_canvas_state.json'
 def index():
     return render_template('index.html')
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
-        # Replace with actual user authentication logic
-        if email == 'user@example.com' and password == 'password':
-            return redirect(url_for('webpage'))
-        else:
-            flash('Invalid credentials')
-            return redirect(url_for('index'))
-    return render_template('webpage.html')
-
 @app.route('/webpage')
 def webpage():
     return render_template('webpage.html')

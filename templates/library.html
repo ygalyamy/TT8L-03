@@ -116,6 +116,84 @@
             color: white;
             text-shadow: 1px 1px 2px black;
         }
+
+        .toggle {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .toggle-label {
+            margin-right: 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 20px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        .notification-container {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            z-index: 1000;
+            display: none;
+        }
+
+        .notification {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-width: 300px;
+        }
     </style>
 </head>
 <body>
@@ -161,19 +239,31 @@
             </div>
         </div>
     </div>
+    <div class="container">
+        <div class="toggle"  style="display:none;">
+            <label class="toggle-label">Show Notification</label>
+            <label class="switch">
+                <input type="checkbox" id="notification-switch" onchange="toggleNotifications()">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+    <div class="notification-container" id="notificationContainer">
+        <div class="notification" id="notification">
+            Don't forget to rate your book!
+            <button onclick="closeNotification()">Close</button>
+        </div>
+    </div>
 
     <script>
+        // Theme functions
         function setLightTheme() {
             document.body.classList.remove("dark-theme");
-            document.getElementById("light-switch").checked = true;
-            document.getElementById("dark-switch").checked = false;
             localStorage.setItem("theme", "light");
         }
 
         function setDarkTheme() {
             document.body.classList.add("dark-theme");
-            document.getElementById("light-switch").checked = false;
-            document.getElementById("dark-switch").checked = true;
             localStorage.setItem("theme", "dark");
         }
 
@@ -193,6 +283,48 @@
             }
         }
 
+        // Notification functions
+        var notificationInterval;
+
+        function toggleNotifications() {
+            var isChecked = document.getElementById("notification-switch").checked;
+            if (isChecked) {
+                localStorage.setItem("notificationsEnabled", "true");
+                startNotificationInterval();
+            } else {
+                localStorage.setItem("notificationsEnabled", "false");
+                clearInterval(notificationInterval);
+            }
+        }
+
+        function startNotificationInterval() {
+            checkAndShowNotification();
+            notificationInterval = setInterval(function() {
+                checkAndShowNotification();
+            }, 60 * 60 * 1000); // Check every 24 hours
+        }
+
+        function checkAndShowNotification() {
+            var lastNotificationTime = localStorage.getItem('lastNotificationTime');
+            var currentTime = new Date().getTime();
+            var oneDay = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+            if (!lastNotificationTime || (currentTime - lastNotificationTime >= oneDay)) {
+                showNotification();
+                localStorage.setItem('lastNotificationTime', currentTime);
+            }
+        }
+
+        function showNotification() {
+            var notificationContainer = document.getElementById("notificationContainer");
+            notificationContainer.style.display = "block";
+        }
+
+        function closeNotification() {
+            var notificationContainer = document.getElementById("notificationContainer");
+            notificationContainer.style.display = "none";
+        }
+
+        // Initialization
         window.onload = function() {
             const theme = localStorage.getItem("theme");
             if (theme === "dark") {
@@ -200,8 +332,17 @@
             } else {
                 setLightTheme();
             }
+
+            const notificationsEnabled = localStorage.getItem("notificationsEnabled");
+            if (notificationsEnabled === "true") {
+                document.getElementById("notification-switch").checked = true;
+                startNotificationInterval();
+            } else {
+                document.getElementById("notification-switch").checked = false;
+            }
         };
 
+        // Function to redirect to different pages
         function redirectToForm(page) {
             window.location.href = page;
         }

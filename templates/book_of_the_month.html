@@ -89,6 +89,24 @@
             margin: 10px 0;
             border-radius: 8px;
         }
+        .notification-container {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            z-index: 1000;
+            display: none;
+        }
+
+        .notification {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-width: 300px;
+        }
     </style>
 </head>
 <body>
@@ -102,6 +120,21 @@
         <section>Top Books of the Month</section>
         <div id="booksContainer"></div> <!-- Added booksContainer here -->
     </main>
+    <div class="container" style="display: none;">
+        <div class="toggle" style="display:none;">
+            <label class="toggle-label">Show Notification</label>
+            <label class="switch">
+                <input type="checkbox" id="notification-switch" onchange="toggleNotifications()">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+    <div class="notification-container" id="notificationContainer">
+        <div class="notification" id="notification">
+            Don't forget to rate your book!
+            <button onclick="closeNotification()">Close</button>
+        </div>
+    </div>
 
     <script>
         // Retrieve data from local storage
@@ -157,13 +190,96 @@
         sortAndDisplayReviews(thrillerReviews, 'Thriller');
         sortAndDisplayReviews(romanceReviews, 'Romance');
 
-        // Apply the theme on load
+        // Theme functions
+        function setLightTheme() {
+            document.body.classList.remove("dark-theme");
+            localStorage.setItem("theme", "light");
+        }
+
+        function setDarkTheme() {
+            document.body.classList.add("dark-theme");
+            localStorage.setItem("theme", "dark");
+        }
+
+        function toggleLightTheme() {
+            if (document.getElementById("light-switch").checked) {
+                setLightTheme();
+            } else {
+                setDarkTheme();
+            }
+        }
+
+        function toggleDarkTheme() {
+            if (document.getElementById("dark-switch").checked) {
+                setDarkTheme();
+            } else {
+                setLightTheme();
+            }
+        }
+
+        // Notification functions
+        var notificationInterval;
+
+        function toggleNotifications() {
+            var isChecked = document.getElementById("notification-switch").checked;
+            if (isChecked) {
+                localStorage.setItem("notificationsEnabled", "true");
+                startNotificationInterval();
+            } else {
+                localStorage.setItem("notificationsEnabled", "false");
+                clearInterval(notificationInterval);
+            }
+        }
+
+        function startNotificationInterval() {
+            checkAndShowNotification();
+            notificationInterval = setInterval(function() {
+                checkAndShowNotification();
+            }, 60 * 60 * 1000); // Check every hour
+        }
+
+        function checkAndShowNotification() {
+            var lastNotificationTime = localStorage.getItem('lastNotificationTime');
+            var currentTime = new Date().getTime();
+            var oneDay = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+            if (!lastNotificationTime || (currentTime - lastNotificationTime >= oneDay)) {
+                showNotification();
+                localStorage.setItem('lastNotificationTime', currentTime);
+            }
+        }
+
+        function showNotification() {
+            var notificationContainer = document.getElementById("notificationContainer");
+            notificationContainer.style.display = "block";
+        }
+
+        function closeNotification() {
+            var notificationContainer = document.getElementById("notificationContainer");
+            notificationContainer.style.display = "none";
+        }
+
+        // Initialization
         window.onload = function() {
             const theme = localStorage.getItem("theme");
             if (theme === "dark") {
-                document.body.classList.add("dark-theme");
+                setDarkTheme();
+            } else {
+                setLightTheme();
+            }
+
+            const notificationsEnabled = localStorage.getItem("notificationsEnabled");
+            if (notificationsEnabled === "true") {
+                document.getElementById("notification-switch").checked = true;
+                startNotificationInterval();
+            } else {
+                document.getElementById("notification-switch").checked = false;
             }
         };
+
+        // Function to redirect to different pages
+        function redirectToForm(page) {
+            window.location.href = page;
+        }
     </script>
 </body>
 </html>
