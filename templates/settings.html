@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/papertrail.png') }}">
+    <title>Library</title>
+    <style>
+        /* Styles for navigation bar */
+        nav {
+            background-color: rgba(0, 0, 0, 0.334);
+            text-align: center;
+            padding-top: 14px;
+            padding-bottom: 14px;
+        }
+
+        nav a {
+            text-decoration: none;
+            font-size: 25px;
+            padding-left: 10px;
+            padding-right: 10px;
+            color: white;
+            font-family: 'Times New Roman', Times Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif, serif;
+        }
+
+        nav a:hover {
+            color: rgb(181, 147, 228);
+        }
+
+        /* Light and Dark theme styles */
+        :root {
+            --background-color: #ffffff;
+            --text-color: #000000;
+            --button-background-color: #ffffff;
+            --button-text-color: #000000;
+            --button-border-color: #000000;
+            --toggle-background: #cccccc;
+            --toggle-color: hsl(120, 91%, 48%);
+            --toggle-knob: #ffffff;
+            --text-size: 16px;
+        }
+
+        .dark-theme {
+            --background-color: #1f1f1f;
+            --text-color: #ffffff;
+            --button-background-color: #1f1f1f;
+            --button-text-color: #ffffff;
+            --button-border-color: #ffffff;
+            --toggle-background: #333;
+            --toggle-color: hsl(120, 91%, 48%);
+            --toggle-knob: #ffffff;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-family: Arial, sans-serif;
+            padding: 10px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            max-width: 300px;
+            margin-top: 20px; /* Added margin for spacing */
+        }
+
+        .button-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: var(--button-background-color);
+            color: var(--button-text-color);
+            border: 1px solid var(--button-border-color);
+            padding: 10px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .switch {
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+            background-color: var(--toggle-background);
+            border-radius: 34px;
+            cursor: pointer;
+            transition: background-color 0.4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: var(--toggle-knob);
+            border-radius: 50%;
+            transition: transform 0.4s;
+        }
+
+        input:checked + .slider {
+            background-color: var(--toggle-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        .toggle {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .toggle-label {
+            margin-right: 15px;
+            font-size: var(--text-size);
+            font-family: Arial, sans-serif;
+        }
+
+        .notification-container {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            z-index: 1000;
+            display: none;
+        }
+
+        .notification {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="{{ url_for('webpage') }}">HOME</a>
+        <a href="{{ url_for('library') }}">LIBRARY</a>
+        <a href="{{ url_for('book_of_the_month') }}">BOOK OF THE MONTH</a>
+        <a href="{{ url_for('settings') }}">SETTINGS</a>
+    </nav>
+    <hr>
+    <div class="container">
+        <div class="button-container">
+            <button onclick="setLightTheme()">Light Theme</button>
+            <label class="switch">
+                <input type="checkbox" id="light-switch" onchange="toggleLightTheme()">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="button-container">
+            <button onclick="setDarkTheme()">Dark Theme</button>
+            <label class="switch">
+                <input type="checkbox" id="dark-switch" onchange="toggleDarkTheme()">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="toggle">
+            <label class="toggle-label">Show Notification</label>
+            <label class="switch">
+                <input type="checkbox" id="notification-switch" onchange="toggleNotifications()">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+    <div class="notification-container" id="notificationContainer">
+        <div class="notification" id="notification">
+            Don't forget to rate your book!
+            <button onclick="closeNotification()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        function setLightTheme() {
+            document.body.classList.remove("dark-theme");
+            document.getElementById("light-switch").checked = true;
+            document.getElementById("dark-switch").checked = false;
+            localStorage.setItem("theme", "light");
+        }
+
+        function setDarkTheme() {
+            document.body.classList.add("dark-theme");
+            document.getElementById("light-switch").checked = false;
+            document.getElementById("dark-switch").checked = true;
+            localStorage.setItem("theme", "dark");
+        }
+
+        function toggleLightTheme() {
+            if (document.getElementById("light-switch").checked) {
+                setLightTheme();
+            } else {
+                setDarkTheme();
+            }
+        }
+
+        function toggleDarkTheme() {
+            if (document.getElementById("dark-switch").checked) {
+                setDarkTheme();
+            } else {
+                setLightTheme();
+            }
+        }
+
+        function toggleNotifications() {
+            var isChecked = document.getElementById("notification-switch").checked;
+            if (isChecked) {
+                localStorage.setItem("notificationsEnabled", "true");
+                startNotificationInterval();
+            } else {
+                localStorage.setItem("notificationsEnabled", "false");
+                clearInterval(notificationInterval);
+            }
+        }
+
+        window.onload = function() {
+            const theme = localStorage.getItem("theme");
+            if (theme === "dark") {
+                setDarkTheme();
+            } else {
+                setLightTheme();
+            }
+
+            var toggleButton = document.getElementById("notification-switch");
+            if (localStorage.getItem("notificationsEnabled") === "true") {
+                toggleButton.checked = true;
+                startNotificationInterval();
+            }
+        };
+
+        var notificationsEnabled = false;
+        var notificationInterval;
+
+        function startNotificationInterval() {
+            checkAndShowNotification();
+
+            // Set the interval to check every hour
+            notificationInterval = setInterval(function() {
+                var currentTime = new Date().getTime();
+                var lastNotificationTime = localStorage.getItem('lastNotificationTime');
+
+                if (!lastNotificationTime || currentTime - lastNotificationTime >= 24 * 60 * 60 * 1000) { // 24 hours
+                    showNotification();
+                    localStorage.setItem('lastNotificationTime', currentTime);
+                }
+            }, 60 * 60 * 1000); // Check every hour
+        }
+
+        function checkAndShowNotification() {
+            var lastNotificationTime = localStorage.getItem('lastNotificationTime');
+            var currentTime = new Date().getTime();
+            var oneDay = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+            if (!lastNotificationTime || currentTime - lastNotificationTime >= oneDay) {
+                showNotification();
+                localStorage.setItem('lastNotificationTime', currentTime);
+            }
+        }
+
+        function showNotification() {
+            var notificationContainer = document.getElementById("notificationContainer");
+            notificationContainer.style.display = "block";
+
+            setTimeout(function() {
+                notificationContainer.style.display = "none";
+            }, 3000);
+        }
+
+        function closeNotification() {
+            var notificationContainer = document.getElementById("notificationContainer");
+            notificationContainer.style.display = "none";
+        }
+    </script>
+</body>
+</html>

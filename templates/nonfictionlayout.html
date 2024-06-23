@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/papertrail.png') }}">
+    <title>Non Fiction Book Reviews</title>
+    <style>
+        /* Styling for review items */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--container-background-color);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Styling for review items */
+        .review-item {
+            display: flex;
+            border: 1px solid var(--item-border-color);
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            background-color: var(--item-background-color);
+            transition: box-shadow 0.3s ease;
+        }
+        .review-item:hover {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        .review-cover {
+            flex: 0 200px; /* Fixed width for cover */
+            margin-right: 20px;
+        }
+        .review-cover img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .no-cover {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            background-color: var(--no-cover-background-color);
+            border-radius: 8px;
+        }
+        .no-cover-text {
+            color: var(--no-cover-text-color);
+            text-align: center;
+        }
+        .review-content {
+            flex: 1;
+        }
+        .review-content h2 {
+            margin-top: 0;
+            color: var(--text-color);
+        }
+        .review-details {
+            margin-top: 10px;
+            font-size: 14px;
+            color: var(--details-text-color);
+        }
+        .edit-button {
+            background-color: var(--button-background-color);
+            border: none;
+            color: var(--button-text-color);
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        .edit-button:hover {
+            background-color: var(--button-hover-background-color);
+        }
+
+        /* Light and Dark theme styles */
+        :root {
+            --background-color: #ffffff;
+            --text-color: #000000;
+            --container-background-color: #ffffff;
+            --item-border-color: #ccc;
+            --item-background-color: #ffffff;
+            --no-cover-background-color: #f0f0f0;
+            --no-cover-text-color: #888;
+            --details-text-color: #666;
+            --button-background-color: #000000A0;
+            --button-text-color: #ffffff;
+            --button-hover-background-color: #000000;
+        }
+
+        .dark-theme {
+            --background-color: #1f1f1f;
+            --text-color: #ffffff;
+            --container-background-color: #2c2c2c;
+            --item-border-color: #555;
+            --item-background-color: #2c2c2c;
+            --no-cover-background-color: #3a3a3a;
+            --no-cover-text-color: #ccc;
+            --details-text-color: #aaa;
+            --button-background-color: #1f1f1f;
+            --button-text-color: #ffffff;
+            --button-hover-background-color: #333;
+        }
+
+        /* Theme switch button styles */
+        .theme-switch-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .switch {
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+            position: relative;
+        }
+
+        .switch input {
+            display: none;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            background-color: var(--button-background-color);
+            border-radius: 34px;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            transition: 0.4s;
+        }
+
+        .slider::before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background-color: var(--button-text-color);
+            bottom: 2px;
+            left: 2px;
+            transition: 0.4s;
+        }
+
+        input:checked + .slider {
+            background-color: var(--button-hover-background-color);
+        }
+
+        input:checked + .slider::before {
+            transform: translateX(20px);
+        }
+    </style>
+</head>
+<body>
+    <h1>Non Fiction Book Reviews</h1>
+
+    <div id="reviewsContainer"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Retrieve reviews from localStorage or fetch from server
+            var reviews = JSON.parse(localStorage.getItem('nonfictionbookReviews')) || [];
+            var genre = 'nonfiction';
+
+            // Display each review
+            var reviewsContainer = document.getElementById('reviewsContainer');
+            reviews.forEach((review, index) => {
+                var reviewItem = document.createElement('div');
+                reviewItem.classList.add('review-item');
+
+                // Fetch the latest image path from localStorage
+                var localStorageKey = genre === 'nonfiction' ? 'nonfictionBookCoverImagePath' : 'fictionBookCoverImagePath';
+                var imageExists = localStorage.getItem(localStorageKey) !== null;
+                var image_path = localStorage.getItem(localStorageKey) || 'images/default_cover.png'; // Replace with default image path
+
+                // Create cover image or placeholder
+                var coverContainer = document.createElement('div');
+                coverContainer.classList.add('review-cover');
+                if (imageExists) {
+                    var coverImg = document.createElement('img');
+                    coverImg.src = image_path;
+                    coverImg.alt = 'Book Cover';
+                    coverContainer.appendChild(coverImg);
+                } else {
+                    var noCoverDiv = document.createElement('div');
+                    noCoverDiv.classList.add('no-cover');
+                    var noCoverText = document.createElement('p');
+                    noCoverText.classList.add('no-cover-text');
+                    noCoverText.textContent = 'No cover image available';
+                    noCoverDiv.appendChild(noCoverText);
+                    coverContainer.appendChild(noCoverDiv);
+                }
+
+                // Create review content
+                var reviewContent = document.createElement('div');
+                reviewContent.classList.add('review-content');
+                reviewContent.innerHTML = `
+                    <h2>Review ${index + 1}</h2>
+                    <p><strong>Book Rating:</strong> ${review.book_rating}</p>
+                    <p><strong>Read Again Rating:</strong> ${review.read_again}</p>
+                    <p><strong>Impact Rating:</strong> ${review.impact_rating}</p>
+                    <p><strong>Overall Thoughts:</strong> ${review.overall_thoughts}</p>
+                    <p class="review-details"><strong>Review Date:</strong> ${review.review_date}</p>
+                    <a href="{{ url_for('nonfiction_edit_book_cover') }}" class="edit-button">Edit</a>
+                `;
+
+                // Append cover and content to review item
+                reviewItem.appendChild(coverContainer);
+                reviewItem.appendChild(reviewContent);
+
+                // Append review item to reviews container
+                reviewsContainer.appendChild(reviewItem);
+            });
+            // Apply saved theme on page load
+            const theme = localStorage.getItem('theme');
+                if (theme === 'dark') {
+                    document.body.classList.add('dark-theme');
+                    document.getElementById('theme-switch').checked = true;
+                } else {
+                    document.body.classList.remove('dark-theme');
+                }
+        });
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            const isDark = document.body.classList.contains('dark-theme');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+    </script>
+</body>
+</html>
