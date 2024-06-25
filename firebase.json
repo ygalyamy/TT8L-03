@@ -1,10 +1,23 @@
 {
   "hosting": {
-    "public": "public",
+    "public": "public", 
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
-    ]
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "function": "app" 
+      }
+    ],
+    "github": {
+      "repo": "github-ygalyamy/TT8L-03",
+      "branch": "main"
+    }
+  },
+  "functions": {
+    "source": "functions" 
   }
 }
