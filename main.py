@@ -24,7 +24,7 @@ HORROR_CANVAS_STATE_PATH = 'static/images/horror_canvas_state.json'
 MANGA_CANVAS_STATE_PATH = 'static/images/manga_canvas_state.json'
 NONFICTION_CANVAS_STATE_PATH = 'static/images/nonfiction_canvas_state.json'
 
-@app.route('/index')
+@app.route('/')
 def index():
     return render_template('index.html')
 
